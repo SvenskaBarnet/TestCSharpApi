@@ -24,3 +24,7 @@ string password = Console.ReadLine();
 Log(WebApp.Utils.IsPasswordGoodEnough(password));
 }
 */
+/*
+var a = new UtilsTest();
+a.TestRemoveBadWord();
+*/

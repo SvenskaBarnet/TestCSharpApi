@@ -41,4 +41,14 @@ public class UtilsTest
         Assert.False(Utils.IsPasswordGoodEnough("aA!bcdef"));
         Assert.True(Utils.IsPasswordGoodEnough("aA!12345"));
     }
+
+    [Fact]
+    public void TestRemoveBadWord()
+    {
+        Assert.Equal("well ****o there Mr.****, I like you ****, you seem nice **** don't you, ****?", 
+            Utils.RemoveBadWords("well hello there Mr.s_h_i_t, I like you f u c k e r, you seem nice 5h1t don't you, bastard?", "****"
+            ));
+        Assert.Equal("Check it out now, funk-soul-brother", Utils.RemoveBadWords("Check it out now, funk-soul-brother", "****"));
+    }
+    
 }

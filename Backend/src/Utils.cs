@@ -36,4 +36,19 @@ public static class Utils
 
         return !bools.Contains(false);
     }
+
+    public static string RemoveBadWords(string textToClean, string replacementString)
+    {
+        var read = File.ReadAllText(Path.Combine("json", "bad-words.json"));
+        Arr badWords = JSON.Parse(read).badwords;
+        var badWordsOrdered = badWords.OrderBy(word => word.ToString().Length).Reverse();
+        string cleanText = textToClean;
+
+        foreach (var word in badWordsOrdered)
+        {
+            cleanText = Regex.Replace(cleanText, word.ToString(), replacementString, RegexOptions.IgnoreCase);
+        }
+
+        return cleanText;
+    }
 }
