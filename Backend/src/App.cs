@@ -11,4 +11,16 @@ Globals = Obj(new
     sessionLifeTimeHours = 2
 });
 
-Server.Start();
+//Server.Start();
+/*
+var a = new UtilsTest();
+a.TestCreateMockUsers();
+*/
+/*
+while(true)
+{
+Console.Write("Enter Password: ");
+string password = Console.ReadLine();
+Log(WebApp.Utils.IsPasswordGoodEnough(password));
+}
+*/
