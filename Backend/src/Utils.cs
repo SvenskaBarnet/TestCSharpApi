@@ -1,3 +1,4 @@
+using System.ComponentModel.Design;
 using Microsoft.AspNetCore.Identity;
 
 namespace WebApp;
@@ -5,7 +6,7 @@ public static class Utils
 {
     public static Arr CreateMockUsers()
     {
-        var read = File.ReadAllText(Path.Combine("json", "mock-users.json"));
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
         Arr successfullyWrittenUsers = Arr();
 
@@ -39,7 +40,7 @@ public static class Utils
 
     public static string RemoveBadWords(string textToClean, string replacementString)
     {
-        var read = File.ReadAllText(Path.Combine("json", "bad-words.json"));
+        var read = File.ReadAllText(FilePath("json", "bad-words.json"));
         Arr badWords = JSON.Parse(read).badwords;
         var badWordsOrdered = badWords.OrderBy(word => word.ToString().Length).Reverse();
         string cleanText = textToClean;
@@ -50,5 +51,11 @@ public static class Utils
         }
 
         return cleanText;
+    }
+
+    public static Obj CountDomainsFromUserEmails()
+    {
+        Arr user = SQLQuery("SELECT email FROM users")
+        return null;
     }
 }

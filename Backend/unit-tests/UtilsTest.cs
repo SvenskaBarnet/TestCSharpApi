@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.Design;
 using Xunit;
 namespace WebApp;
 
@@ -7,7 +9,7 @@ public class UtilsTest
     public void TestCreateMockUsers()
     {
         //read all mock users from json-file
-        var read = File.ReadAllText(Path.Combine("json","mock-users.json"));
+        var read = File.ReadAllText(FilePath("json","mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
 
         // Get all users from database
@@ -50,5 +52,24 @@ public class UtilsTest
             ));
         Assert.Equal("Check it out now, funk-soul-brother", Utils.RemoveBadWords("Check it out now, funk-soul-brother", "****"));
     }
-    
+
+    [Fact]
+    public void TestCountDomainsFromUserEmails()
+    {
+        Arr users = SQLQuery("SELECT email FROM users");
+        Obj domainsInDb = Obj();
+        foreach (var user in users)
+        {
+            string domain = user.email.Split('@')[1];
+            if(!domainsInDb.HasKey(domain))
+            {
+                domainsInDb[domain] = 1;
+            }
+            else
+            {
+                domainsInDb[domain]++;
+            }
+        }
+        Assert.Equivalent(domainsInDb, Utils.CountDomainsFromUserEmails());
+    }
 }
