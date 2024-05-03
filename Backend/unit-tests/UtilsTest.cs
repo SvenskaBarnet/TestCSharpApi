@@ -33,15 +33,15 @@ public class UtilsTest
         //Assert.Equal(mockUsersNotInDb.Length, results.Length);
     }
 
-    [Fact]
-    public void TestIsPasswordGoodEnough()
+    [Theory]
+    [InlineData("aA!1234")]
+    [InlineData("aa!12345")]
+    [InlineData("AA!12345")]
+    [InlineData("aA123456")]
+    [InlineData("aA!bcdef")]
+    public void TestIsPasswordGoodEnough(string password)
     {
-        Assert.False(Utils.IsPasswordGoodEnough("aA!1234"));
-        Assert.False(Utils.IsPasswordGoodEnough("aa!12345"));
-        Assert.False(Utils.IsPasswordGoodEnough("AA!12345"));
-        Assert.False(Utils.IsPasswordGoodEnough("aA123456"));
-        Assert.False(Utils.IsPasswordGoodEnough("aA!bcdef"));
-        Assert.True(Utils.IsPasswordGoodEnough("aA!12345"));
+        Assert.False(Utils.IsPasswordGoodEnough(password));
     }
 
     [Fact]

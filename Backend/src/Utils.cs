@@ -55,7 +55,12 @@ public static class Utils
 
     public static Obj CountDomainsFromUserEmails()
     {
-        Arr user = SQLQuery("SELECT email FROM users")
+        Arr user = SQLQuery("SELECT SUBSTRING(email, POSITION('@' IN email) + 1, LEN(email)) AS domain, count(id) FROM users GROUP BY domain");
+
+        foreach(var domain in user)
+        {
+            Log(domain);
+        }
         return null;
     }
 }
