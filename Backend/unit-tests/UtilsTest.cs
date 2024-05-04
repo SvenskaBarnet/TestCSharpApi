@@ -9,17 +9,18 @@ public class UtilsTest
     public void TestCreateMockUsers()
     {
         //read all mock users from json-file
-        var read = File.ReadAllText(FilePath("json","mock-users.json"));
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
 
         // Get all users from database
         Arr usersInDb = SQLQuery("SELECT email FROM users");
         Arr emailsInDb = usersInDb.Map(user => user.email);
 
+
         Arr mockUsersNotInDb = mockUsers.Filter(
             mockUser => !emailsInDb.Contains(mockUser.email)
         );
-        
+
         //Assert that the CreateMockUsers only return
         //newvly created users in the db
         Arr results = Utils.CreateMockUsers();
