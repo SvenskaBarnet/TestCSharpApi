@@ -44,7 +44,25 @@ public static class Utils
 
     public static Arr RemoveMockUsers()
     {
-        return Arr();
+        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
+        Arr mockUsers = JSON.Parse(read);
+        Arr deletedMockUsers = Arr();
+
+        foreach (var user in mockUsers)
+        {
+            Obj deletedUser = SQLQueryOne("SELECT * FROM users WHERE email = $email", user);
+            try
+            {
+                deletedUser.Delete("password");
+                SQLQueryOne("DELETE FROM users WHERE email = $email", user);
+                deletedMockUsers.Push(deletedUser);
+            }
+            catch
+            {
+                continue;
+            }
+        }
+        return deletedMockUsers;
     }
 
     public static bool IsPasswordGoodEnough(string password)

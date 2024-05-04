@@ -19,21 +19,11 @@ public class UtilsTest
         Arr mockUsersNotInDb = mockUsers.Filter(
             mockUser => !emailsInDb.Contains(mockUser.email)
         );
-        
-        //Assert that the CreateMockUsers only return
-        //newvly created users in the db
-        Arr results = Utils.CreateMockUsers();
 
-        Log("Test:");
-        Log("mockUsers.Length", mockUsers.Length);
-        Log("usersInDb.Length", usersInDb.Length);
-        Log("mockUsersNotInDb.Length", mockUsersNotInDb.Length);
-       // Assert.Equal(mockUsersNotInDb.Length, results.Length);
-        //Assert.Equivalent(mockUsersNotInDb, results);
+        Assert.Equivalent(mockUsersNotInDb, Utils.CreateMockUsers());
     }
 
     [Fact]
-
     public void TestRemoveMockUsers()
     {
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
@@ -42,11 +32,15 @@ public class UtilsTest
 
         foreach (var user in mockUsers)
         {
-            Obj userExists = SQLQueryOne("SELECT count(*) FROM users WHERE email = $email", user);
-            SQLQueryOne("DELETE * FROM users WHERE email = $email", user);
-            if(userExists["count(*)"] == 1)
+            Obj userExists = SQLQueryOne("SELECT * FROM users WHERE id = 1");
+            try
             {
-                removedUsers.Push(user);
+                userExists.Delete("password");
+                removedUsers.Push(userExists);
+            }
+            catch
+            {
+                continue;
             }
         }
         Assert.Equivalent(removedUsers, Utils.RemoveMockUsers());
