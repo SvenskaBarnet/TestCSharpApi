@@ -8,19 +8,35 @@ public static class Utils
     {
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
-        Arr successfullyWrittenUsers = Arr();
 
-        foreach (var user in mockUsers)
+        //Defines which mockUsers that's already in the database to make sure that the method doesn't encrypt all 1000 passwords everytime you run the funtion.
+        Arr mockUsersNotInDb = Arr();
+        foreach(var user in mockUsers)
         {
-            user.password = "12345678";
-            var result = SQLQueryOne(
-                @"INSERT INTO users(firstName, lastName, email, password)
-                VALUES ($firstName, $lastName, $email, $password)
-                ", user);
-            if(!result.HasKey("error"))
+            Obj userExists = SQLQueryOne("SELECT count(*) FROM users WHERE email = $email", user);
+            if(userExists["count(*)"] == 0)
             {
-                user.Delete("password");
-                successfullyWrittenUsers.Push(user);
+                mockUsersNotInDb.Push(user);
+            }
+        }
+
+        Arr successfullyWrittenUsers = Arr();
+        foreach (var user in mockUsersNotInDb)
+        {
+            //Adds 2024 before user email and changes first letter to uppercase
+            user.password = $"2024{user.email[0].ToString().ToUpper()}{user.email.Substring(1)}";
+            if (IsPasswordGoodEnough(user.password))
+            {
+                user.password = Password.Encrypt(user.password);
+                var result = SQLQueryOne(
+                    @"INSERT INTO users(firstName, lastName, email, password)
+                    VALUES ($firstName, $lastName, $email, $password)
+                ", user);
+                if (!result.HasKey("error"))
+                {
+                    user.Delete("password");
+                    successfullyWrittenUsers.Push(user);
+                }
             }
         }
         return successfullyWrittenUsers;
@@ -55,12 +71,12 @@ public static class Utils
 
     public static Obj CountDomainsFromUserEmails()
     {
-        Arr user = SQLQuery("SELECT SUBSTRING(email, POSITION('@' IN email) + 1, LEN(email)) AS domain, count(id) FROM users GROUP BY domain");
-
+        Arr user = SQLQuery("SELECT SUBSTRING(email, instr(email, '@') + 1, length(email)) AS domain, count(id) AS id FROM users GROUP BY domain");
+        Obj countedDomains = Obj();
         foreach(var domain in user)
         {
-            Log(domain);
+            countedDomains[domain.domain] = domain.id;
         }
-        return null;
+        return countedDomains;
     }
 }

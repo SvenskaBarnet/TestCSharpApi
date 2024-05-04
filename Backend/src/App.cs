@@ -1,4 +1,6 @@
 // Global settings
+using Xunit.Sdk;
+
 Globals = Obj(new
 {
     debugOn = true,
@@ -24,4 +26,5 @@ Log(WebApp.Utils.IsPasswordGoodEnough(password));
 */
 //a.TestRemoveBadWord();
 //a.TestCountDomainsFromUserEmails();
-WebApp.Utils.CountDomainsFromUserEmails();
+//WebApp.Utils.CountDomainsFromUserEmails();
+WebApp.Utils.CreateMockUsers();

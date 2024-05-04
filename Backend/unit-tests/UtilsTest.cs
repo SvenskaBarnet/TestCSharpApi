@@ -24,13 +24,8 @@ public class UtilsTest
         //newvly created users in the db
         Arr results = Utils.CreateMockUsers();
 
-        /*
-        Log(results);
-        Log(results.Length);
-        Log(mockUsersNotInDb.Length);
-        */
-
-        //Assert.Equal(mockUsersNotInDb.Length, results.Length);
+        Assert.Equal(mockUsersNotInDb.Length, results.Length);
+        Assert.Equivalent(mockUsersNotInDb, results);
     }
 
     [Theory]
