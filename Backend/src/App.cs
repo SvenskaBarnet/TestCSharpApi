@@ -28,3 +28,4 @@ Log(WebApp.Utils.IsPasswordGoodEnough(password));
 //a.TestCountDomainsFromUserEmails();
 //WebApp.Utils.CountDomainsFromUserEmails();
 //WebApp.Utils.CreateMockUsers();
+a.TestCreateMockUsers();

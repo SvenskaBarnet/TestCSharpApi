@@ -42,6 +42,11 @@ public static class Utils
         return successfullyWrittenUsers;
     }
 
+    public static Arr RemoveMockUsers()
+    {
+        return Arr();
+    }
+
     public static bool IsPasswordGoodEnough(string password)
     {
         List<bool> bools = new List<bool>();
