@@ -51,15 +51,11 @@ public static class Utils
         foreach (var user in mockUsers)
         {
             Obj deletedUser = SQLQueryOne("SELECT * FROM users WHERE email = $email", user);
-            try
+            if(deletedUser != null)
             {
                 deletedUser.Delete("password");
                 SQLQueryOne("DELETE FROM users WHERE email = $email", user);
                 deletedMockUsers.Push(deletedUser);
-            }
-            catch
-            {
-                continue;
             }
         }
         return deletedMockUsers;

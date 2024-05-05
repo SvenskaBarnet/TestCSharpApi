@@ -26,22 +26,18 @@ public class UtilsTest
     {
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
-        Arr removedUsers = Arr();
+        Arr usersToBeRemoved = Arr();
 
         foreach (var user in mockUsers)
         {
             Obj userExists = SQLQueryOne("SELECT * FROM users WHERE id = 1");
-            try
+            if(userExists != null)
             {
                 userExists.Delete("password");
-                removedUsers.Push(userExists);
-            }
-            catch
-            {
-                continue;
+                usersToBeRemoved.Push(userExists);
             }
         }
-        Assert.Equivalent(removedUsers, Utils.RemoveMockUsers());
+        Assert.Equivalent(usersToBeRemoved, Utils.RemoveMockUsers());
     }
 
     [Theory]
