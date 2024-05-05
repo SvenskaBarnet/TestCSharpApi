@@ -81,7 +81,7 @@ public static class Utils
     {
         var read = File.ReadAllText(FilePath("json", "bad-words.json"));
         Arr badWords = JSON.Parse(read).badwords;
-        var badWordsOrdered = badWords.OrderBy(word => word.ToString().Length).Reverse();
+        var badWordsOrdered = badWords.OrderByDescending(word => word.ToString().Length);
         string cleanText = textToClean;
 
         foreach (var word in badWordsOrdered)
