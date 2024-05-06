@@ -78,6 +78,7 @@ public class UtilsTest
                 domainsInDb[domain]++;
             }
         }
+        
         Assert.Equivalent(domainsInDb, Utils.CountDomainsFromUserEmails());
     }
 }

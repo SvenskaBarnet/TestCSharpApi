@@ -1,6 +1,3 @@
-using System.ComponentModel.Design;
-using Microsoft.AspNetCore.Identity;
-
 namespace WebApp;
 public static class Utils
 {
@@ -71,13 +68,15 @@ public static class Utils
 
     public static bool IsPasswordGoodEnough(string password)
     {
-        List<bool> bools = new List<bool>();
-        bools.Add(password.Length > 7);
-        bools.Add(password.Any(char.IsUpper));
-        bools.Add(password.Any(char.IsLower));
-        bools.Add(password.Any(ch => !char.IsLetterOrDigit(ch)));
-        bools.Add(password.Any(char.IsDigit));
-
+        List<bool> bools =
+        [
+            password.Length > 7,
+            password.Any(char.IsUpper),
+            password.Any(char.IsLower),
+            password.Any(ch => !char.IsLetterOrDigit(ch)),
+            password.Any(char.IsDigit),
+        ];
+        
         return !bools.Contains(false);
     }
 
@@ -98,11 +97,11 @@ public static class Utils
 
     public static Obj CountDomainsFromUserEmails()
     {
-        Arr user = SQLQuery("SELECT SUBSTRING(email, instr(email, '@') + 1, length(email)) AS domain, count(id) AS id FROM users GROUP BY domain");
+        Arr domains = SQLQueryOne("SELECT SUBSTRING(email, instr(email, '@') + 1, length(email)) AS domain, count(id) AS count FROM users GROUP BY domain");
         Obj countedDomains = Obj();
-        foreach(var domain in user)
+        foreach(var domain in domains)
         {
-            countedDomains[domain.domain] = domain.id;
+            countedDomains[domain.domain] = domain.count;
         }
         return countedDomains;
     }
