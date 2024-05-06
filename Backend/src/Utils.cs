@@ -9,7 +9,7 @@ public static class Utils
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
 
-        //Defines which mockUsers that's already in the database to make sure that the method doesn't encrypt all 1000 passwords everytime you run the funtion.
+        //Defines which mockUsers that's already in the database to make sure that the method only encrypts passwords for those users that's to be added.
         Arr mockUsersNotInDb = Arr();
         foreach(var user in mockUsers)
         {
@@ -20,14 +20,22 @@ public static class Utils
             }
         }
 
+        // I declare a generic password here and comment out the proper code to generate a password for each user.
+        // I do this to make the tests run faster and smoother since encrypting every users password takes a lot of time.
+        string encryptedGenericPassword = Password.Encrypt("Aa!12345");
+
         Arr successfullyWrittenUsers = Arr();
         foreach (var user in mockUsersNotInDb)
         {
             //Adds 2024 before user email and changes first letter to uppercase
-            user.password = $"2024{user.email[0].ToString().ToUpper()}{user.email.Substring(1)}";
-            if (IsPasswordGoodEnough(user.password))
+            //user.password = $"2024{user.email[0].ToString().ToUpper()}{user.email.Substring(1)}";
+
+            //Checks if the password is good enough
+            //if (IsPasswordGoodEnough(user.password))
+            if(IsPasswordGoodEnough(encryptedGenericPassword))
             {
-                user.password = Password.Encrypt(user.password);
+                //user.password = Password.Encrypt(user.password);
+                user.password = encryptedGenericPassword;
                 var result = SQLQueryOne(
                     @"INSERT INTO users(firstName, lastName, email, password)
                     VALUES ($firstName, $lastName, $email, $password)
@@ -46,18 +54,18 @@ public static class Utils
     {
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
+        Arr usersInDb = SQLQuery("SELECT email FROM users");
+        Arr emailsInDb = usersInDb.Map(user => user.email);
+        Arr mockUsersInDb = mockUsers.Filter(mockUser => emailsInDb.Contains(mockUser.email));
         Arr deletedMockUsers = Arr();
 
-        foreach (var user in mockUsers)
+        foreach (var user in mockUsersInDb)
         {
-            Obj deletedUser = SQLQueryOne("SELECT * FROM users WHERE email = $email", user);
-            if(deletedUser != null)
-            {
-                deletedUser.Delete("password");
-                SQLQueryOne("DELETE FROM users WHERE email = $email", user);
-                deletedMockUsers.Push(deletedUser);
-            }
+            user.Delete("password");
+            SQLQueryOne("DELETE FROM users WHERE email = $email", user);
+            deletedMockUsers.Push(user);
         }
+
         return deletedMockUsers;
     }
 

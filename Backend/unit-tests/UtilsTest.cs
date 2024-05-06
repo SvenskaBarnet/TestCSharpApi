@@ -17,6 +17,7 @@ public class UtilsTest
         Arr mockUsersNotInDb = mockUsers.Filter(
             mockUser => !emailsInDb.Contains(mockUser.email)
         );
+        Console.WriteLine("Create users test.");
 
         Assert.Equivalent(mockUsersNotInDb, Utils.CreateMockUsers());
     }
@@ -54,7 +55,7 @@ public class UtilsTest
     [Fact]
     public void TestRemoveBadWord()
     {
-        Assert.Equal("well ****o there Mr.****, I like you ****, you seem nice **** don't you, ****?", 
+        Assert.Equal("well ****o there Mr.****, I like you****, you seem nice **** don't you, ****?", 
             Utils.RemoveBadWords("well hello there Mr.s_h_i_t, I like youf u c k e r, you seem nice 5h1t don't you, bastard?", "****"
             ));
         Assert.Equal("Check it out now, funk-soul-brother", Utils.RemoveBadWords("Check it out now, funk-soul-brother", "****"));
