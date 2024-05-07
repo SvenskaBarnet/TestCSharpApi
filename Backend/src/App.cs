@@ -1,5 +1,4 @@
 // Global settings
-using Xunit.Sdk;
 
 Globals = Obj(new
 {
