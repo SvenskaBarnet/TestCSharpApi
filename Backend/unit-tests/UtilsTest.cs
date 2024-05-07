@@ -2,17 +2,15 @@ namespace WebApp;
 
 public class DatabaseFixture : IDisposable
 {
-    // public string dbTemplatePath = FilePath("DbTemplate", "_db.sqlite3").Regplace(Regex.Escape("Backend\\"), "");
-    public static void CopyDatabase(string dbTemplatePath)
+    public string dbTemplatePath = FilePath("DbTemplate", "_db.sqlite3").Regplace(Regex.Escape("Backend\\"), "");
+    public void CopyDatabase(string dbTemplatePath)
     {
-        //File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
-        Console.WriteLine("start");
+        File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
     }
 
     public void Dispose()
     {
-        //File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
-        Console.WriteLine("end");
+        File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
     }
 }
 
@@ -32,7 +30,6 @@ public class UtilsTest(Xlog Console) : IClassFixture<DatabaseFixture>
         Arr mockUsersNotInDb = mockUsers.Filter(
             mockUser => !emailsInDb.Contains(mockUser.email)
         );
-        Console.WriteLine("Create users test.");
 
         Assert.Equivalent(mockUsersNotInDb, Utils.CreateMockUsers());
     }
