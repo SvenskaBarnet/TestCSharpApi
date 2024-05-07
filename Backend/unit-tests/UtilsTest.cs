@@ -56,9 +56,9 @@ public class UtilsTest
     public void TestRemoveBadWord()
     {
         Assert.Equal("well ****o there Mr.****, I like you****, you seem nice **** don't you, ****?", 
-            Utils.RemoveBadWords("well hello there Mr.s_h_i_t, I like youf u c k e r, you seem nice 5h1t don't you, bastard?", "****"
+            Utils.RemoveBadWords("well hello there Mr.s_h_i_t, I like youf u c k e r, you seem nice 5h1t don't you, bastArd?", "****"
             ));
-        Assert.Equal("Check it out now, funk-soul-brother", Utils.RemoveBadWords("Check it out now, funk-soul-brother", "****"));
+        Assert.Equal("Check it out now, fuNk-soul-brother", Utils.RemoveBadWords("Check it out now, fuNk-soul-brother", "****"));
     }
 
     [Fact]

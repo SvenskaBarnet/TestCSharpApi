@@ -97,7 +97,7 @@ public static class Utils
 
     public static Obj CountDomainsFromUserEmails()
     {
-        Arr domains = SQLQueryOne("SELECT SUBSTRING(email, instr(email, '@') + 1, length(email)) AS domain, count(id) AS count FROM users GROUP BY domain");
+        Arr domains = SQLQuery("SELECT SUBSTRING(email, instr(email, '@') + 1, length(email)) AS domain, count(id) AS count FROM users GROUP BY domain");
         Obj countedDomains = Obj();
         foreach(var domain in domains)
         {
