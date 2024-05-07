@@ -14,8 +14,6 @@ Globals = Obj(new
 });
 
 //Server.Start();
-var a = new UtilsTest();
-//a.TestCreateMockUsers();
 /*
 while(true)
 {
@@ -24,10 +22,6 @@ string password = Console.ReadLine();
 Log(WebApp.Utils.IsPasswordGoodEnough(password));
 }
 */
-//a.TestRemoveBadWord();
-//a.TestCountDomainsFromUserEmails();
 //WebApp.Utils.CountDomainsFromUserEmails();
 //WebApp.Utils.CreateMockUsers();
-//a.TestCreateMockUsers();
 //WebApp.Utils.RemoveMockUsers();
-//a.TestRemoveMockUsers();

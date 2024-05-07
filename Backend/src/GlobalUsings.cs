@@ -10,6 +10,7 @@ global using BCryptNet = BCrypt.Net.BCrypt;
 global using Dyndata;
 global using static Dyndata.Factory;
 global using Xunit;
+global using Xlog = Xunit.Abstractions.ITestOutputHelper;
 
 // Internal
 global using WebApp;

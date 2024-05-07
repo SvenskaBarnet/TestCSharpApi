@@ -6,16 +6,17 @@ public class DatabaseFixture : IDisposable
     public static void CopyDatabase(string dbTemplatePath)
     {
         //File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
-        
+        Console.WriteLine("start");
     }
 
     public void Dispose()
     {
         //File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
+        Console.WriteLine("end");
     }
 }
 
-public class UtilsTest : IClassFixture<DatabaseFixture>
+public class UtilsTest(Xlog Console) : IClassFixture<DatabaseFixture>
 {
     [Fact]
     public void TestCreateMockUsers()
