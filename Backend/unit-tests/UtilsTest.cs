@@ -14,7 +14,7 @@ public class DatabaseFixture : IDisposable
     }
 }
 
-public class UtilsTest(Xlog Console) : IClassFixture<DatabaseFixture>
+public class UtilsTest : IClassFixture<DatabaseFixture>
 {
     [Fact]
     public void TestCreateMockUsers()
