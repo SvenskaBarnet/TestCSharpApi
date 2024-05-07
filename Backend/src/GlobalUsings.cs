@@ -9,6 +9,7 @@ global using Microsoft.Data.Sqlite;
 global using BCryptNet = BCrypt.Net.BCrypt;
 global using Dyndata;
 global using static Dyndata.Factory;
+global using Xunit;
 
 // Internal
 global using WebApp;
