@@ -34,7 +34,6 @@ public class UtilsTest
             Obj userExists = SQLQueryOne("SELECT * FROM users WHERE id = 1");
             if(userExists != null)
             {
-                userExists.Delete("password");
                 usersToBeRemoved.Push(userExists);
             }
         }

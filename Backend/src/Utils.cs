@@ -6,33 +6,11 @@ public static class Utils
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
 
-        //Defines which mockUsers that's already in the database to make sure that the method only encrypts passwords for those users that's to be added.
-        Arr mockUsersNotInDb = Arr();
-        foreach(var user in mockUsers)
-        {
-            Obj userExists = SQLQueryOne("SELECT count(*) FROM users WHERE email = $email", user);
-            if(userExists["count(*)"] == 0)
-            {
-                mockUsersNotInDb.Push(user);
-            }
-        }
-
-        // I declare a generic password here and comment out the proper code to generate a password for each user.
-        // I do this to make the tests run faster and smoother since encrypting every users password takes a lot of time.
-        string encryptedGenericPassword = Password.Encrypt("Aa!12345");
-
         Arr successfullyWrittenUsers = Arr();
-        foreach (var user in mockUsersNotInDb)
+        foreach (var user in mockUsers)
         {
-            //Adds 2024 before user email and changes first letter to uppercase
-            //user.password = $"2024{user.email[0].ToString().ToUpper()}{user.email.Substring(1)}";
-
-            //Checks if the password is good enough
-            //if (IsPasswordGoodEnough(user.password))
-            if(IsPasswordGoodEnough(encryptedGenericPassword))
+            if(IsPasswordGoodEnough(user.password.ToString()))
             {
-                //user.password = Password.Encrypt(user.password);
-                user.password = encryptedGenericPassword;
                 var result = SQLQueryOne(
                     @"INSERT INTO users(firstName, lastName, email, password)
                     VALUES ($firstName, $lastName, $email, $password)
@@ -58,7 +36,6 @@ public static class Utils
 
         foreach (var user in mockUsersInDb)
         {
-            user.Delete("password");
             SQLQueryOne("DELETE FROM users WHERE email = $email", user);
             deletedMockUsers.Push(user);
         }
