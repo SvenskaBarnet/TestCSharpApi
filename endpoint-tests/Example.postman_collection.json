@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8a61c879-ac49-4ad2-a3ad-0c5118f39097",
+		"_postman_id": "73e9aa13-79e5-4dcb-aec1-4f0752964838",
 		"name": "Example",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30881265"
+		"_exporter_id": "34617434"
 	},
 	"item": [
 		{
@@ -53,6 +53,10 @@
 							"    {",
 							"      \"name\": \"Frukter\",",
 							"      \"description\": \"Färska frukter.\"",
+							"    },",
+							"    {",
+							"      \"name\": \"Rengöringsprodukter\",",
+							"      \"description\": \"Allt du behöver för att hålla hemmet rent.\"",
 							"    }",
 							"  ],",
 							"  \"products\": [],",
