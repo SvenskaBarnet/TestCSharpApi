@@ -1,15 +1,21 @@
 namespace WebApp;
 
-
-public class UtilsTest : IClassFixture<CopyDatabase>
+public class DatabaseFixture : IDisposable
 {
-    CopyDatabase copyDatabase;
-
-    public UtilsTest(CopyDatabase copyDatabase)
+    public string dbTemplatePath = FilePath("DbTemplate", "_db.sqlite3").Regplace(Regex.Escape("Backend\\"), "");
+    public void CopyDatabase(string dbTemplatePath)
     {
-        this.copyDatabase = copyDatabase;
+        File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
     }
 
+    public void Dispose()
+    {
+        File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
+    }
+}
+
+public class UtilsTest : IClassFixture<DatabaseFixture>
+{
     [Fact]
     public void TestCreateMockUsers()
     {
