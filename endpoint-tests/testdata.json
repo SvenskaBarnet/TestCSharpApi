@@ -1,5 +1,21 @@
 {
   "counter": 0,
+  "users": [
+    {
+      "email": "admin@admin.admin",
+      "firstName" : "Admin",
+      "lastName" : "Adminsson",
+      "role" : "admin",
+      "password" : "Admin!234"
+    }
+    {
+      "email": "user@user.user",
+      "firstName" : "User",
+      "lastName" : "Usersson",
+      "role" : "user",
+      "password" : "User!234"
+    }
+  ],
   "categories": [
     {
       "name": "Grönsaker",
