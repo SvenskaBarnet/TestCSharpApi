@@ -15,15 +15,19 @@
 						"exec": [
 							"// Test data to use, pasted form our json file with test data",
 							"let testData = {",
+							"  \"userCounter\": 0,",
 							"  \"counter\": 0,",
-							"  \"users\": [",
+							"  \"loggedInUser\" :  ",
 							"    {",
-							"      \"email\": \"admin@admin.admin\",",
-							"      \"firstName\" : \"Admin\",",
-							"      \"lastName\" : \"Adminsson\",",
-							"      \"role\" : \"admin\",",
-							"      \"password\" : \"Admin!234\"",
-							"    },",
+							"      \"id\" : \"id\",",
+							"      \"created\" : \"created\",",
+							"      \"email\" : \"email\",",
+							"      \"firstName\" : \"firstName\",",
+							"      \"lastName\" : \"lastName\",",
+							"      \"role\" : \"role\"",
+							"    }",
+							"  ,",
+							"  \"users\": [",
 							"    {",
 							"      \"email\": \"user@user.user\",",
 							"      \"firstName\" : \"User\",",
@@ -58,7 +62,12 @@
 							"    {",
 							"      \"comment\": \"Very nice gurka\",",
 							"      \"productId\": \"Gurka\",",
-							"      \"userId\": 3",
+							"      \"userId\": \"admin\"",
+							"    },",
+							"    {",
+							"      \"comment\": \"cucumbah, vitamins, minerals, very hig numbah\",",
+							"      \"productId\": \"Gurka\",",
+							"      \"userId\": \"user\"",
 							"    }",
 							"  ]",
 							"};",
@@ -177,7 +186,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\" : \"{{email}}\",\r\n    \"firstName\" : \"{{firstName}}\",\r\n    \"lastName\" : \"{{lastName}}\",\r\n    \"role\" : \"{{role}}\",\r\n    \"password\" : \"{{password}}\"\r\n}",
+					"raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"role\": \"{{role}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -200,13 +209,74 @@
 			"response": []
 		},
 		{
-			"name": "Login as admin",
+			"name": "Login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let testData = pm.collectionVariables.get(\"testData\");\r",
+							"let user = \r",
+							"    {\r",
+							"        \"email\": \"email\",\r",
+							"        \"firstname\": \"firstName\",\r",
+							"        \"lastName\" : \"lastName\",\r",
+							"        \"role\" : \"role\",\r",
+							"        \"password\": \"password\"\r",
+							"    };\r",
+							"if(testData.userCounter == 0)\r",
+							"{\r",
+							"    user.email = \"thomas@nodehill.com\";\r",
+							"    user.firstName = \"Thomas\";\r",
+							"    user.lastName = \"Frank\";\r",
+							"    user.role = \"admin\";\r",
+							"    user.password = \"12345678\";\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"    user = testData.users[testData.userCounter - 1];\r",
+							"}\r",
+							"\r",
+							"pm.variables.set(\"email\", user.email);\r",
+							"pm.variables.set(\"password\", user.password);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get the test data\r",
+							"let testData = pm.collectionVariables.get(\"testData\");\r",
+							"// Get the current category\r",
+							"\r",
+							"// Read the response\r",
+							"let response = pm.response;\r",
+							"// Read the response data\r",
+							"let responseData = pm.response.json();\r",
+							"\r",
+							"// Test that we get a 200 code (ok request) back\r",
+							"pm.test(\"We should get an ok (code 200) back\",()=> {\r",
+							"    pm.expect(response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"testData.loggedInUser = responseData;\r",
+							"pm.collectionVariables.set(\"testData\",testData);\r",
+							"console.log(testData.loggedInUser);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\": \"thomas@nodehill.com\",\n    \"password\": \"12345678\"\n}",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -363,7 +433,8 @@
 							"pm.test(\"We should get an ok (code 200) back\",()=> {\r",
 							"    pm.expect(response.code).to.equal(200);\r",
 							"});\r",
-							"\r",
+							"    console.log(\"category:\", category);\r",
+							"    console.log(\"responseData\", responseData);\r",
 							"// Test that the rest-api returns the same data as our test data for the category\r",
 							"pm.test(\"Test that the correct category data is returned\", () => {\r",
 							"    pm.expect(category).to.deep.equal(responseData);\r",
@@ -539,7 +610,8 @@
 							"pm.test(\"We should get an ok (code 200) back\",()=> {\r",
 							"    pm.expect(response.code).to.equal(200);\r",
 							"});\r",
-							"\r",
+							"    console.log(\"category:\", category);\r",
+							"    console.log(\"responseData\", responseData);\r",
 							"// Test that the rest-api returns the same data as our test data for the category\r",
 							"pm.test(\"Test that the correct category data is returned\", () => {\r",
 							"    pm.expect(category).to.deep.equal(responseData);\r",
@@ -990,15 +1062,19 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Get the test data",
 							"let testData = pm.collectionVariables.get(\"testData\");",
-							"// Get the current comment",
-							"let comment = testData.comments[testData.counter];",
+							"let loggedInUser = testData.loggedInUser;",
+							"",
+							"let comments = testData.comments.filter(comment => comment.userId == loggedInUser.id);",
+							"let comment = comments[testData.counter];",
+							"",
+							"let commentIndex = testData.comments.findIndex(testDataComment => testDataComment.comment == comment.comment);",
 							"",
 							"// Read the response",
 							"let response = pm.response;",
 							"// Read the response data",
 							"let responseData = pm.response.json();",
+							"",
 							"",
 							"// Test that we get a 200 code (ok request) back",
 							"pm.test(\"We should get an ok (code 200) back\",()=> {",
@@ -1010,9 +1086,10 @@
 							"pm.test(\"We should get an insertId back\", () => {",
 							"    pm.expect(responseData.insertId).to.be.a('number');",
 							"    // Add the id",
-							"    comment.id = responseData.insertId;",
+							"    testData.comments[commentIndex].id = responseData.insertId;",
+							"    testData.comments[commentIndex].commentCreated = true;",
 							"    // Log",
-							"    console.log(\"The comment has been created\", comment);",
+							"    console.log(\"testData.comments[commentIndex]\", testData.comments[commentIndex]);",
 							"});",
 							"",
 							"pm.test(\"Expect rowsAffected to equal 1\", () => {",
@@ -1026,7 +1103,7 @@
 							"",
 							"// If there are more comments - then \"loop\"",
 							"// through them using setNextRequest",
-							"if(testData.comments[testData.counter]){",
+							"if(comments[testData.counter]){",
 							"    pm.execution.setNextRequest(\"Create comments\");",
 							"}",
 							"// Otherwise console.log \"All done\"",
@@ -1045,7 +1122,11 @@
 					"script": {
 						"exec": [
 							"let testData = pm.collectionVariables.get(\"testData\");",
-							"let comment = testData.comments[testData.counter];",
+							"let loggedInUser = testData.loggedInUser;",
+							"let comments = testData.comments.filter(comment => comment.userId == loggedInUser.role);",
+							"let comment = comments[testData.counter];",
+							"",
+							"comment.userId = loggedInUser.id;",
 							"",
 							"// Replace productId property value",
 							"// for comment that are hard coded in the",
@@ -1053,10 +1134,10 @@
 							"// with the actual id for the product",
 							"// created during this collection run.",
 							"",
-							"",
 							"let productWithMatchingName = testData.products.find(product => {",
 							"        return product.name == comment.productId",
 							"    });",
+							"",
 							"comment.productId = productWithMatchingName.id;",
 							"pm.collectionVariables.set(\"testData\", testData);",
 							"",
@@ -1106,7 +1187,8 @@
 							"// Get the test data\r",
 							"let testData = pm.collectionVariables.get(\"testData\");\r",
 							"// Get the current comment\r",
-							"let comment = testData.comments[testData.counter];\r",
+							"let comments = testData.comments.filter(comment => comment.commentCreated == true);\r",
+							"let comment = comments[testData.counter];\r",
 							"// Set  a pm variable to id (used in the URL)\r",
 							"pm.variables.set(\"id\", comment.id);"
 						],
@@ -1118,10 +1200,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Get the test data\r",
 							"let testData = pm.collectionVariables.get(\"testData\");\r",
-							"// Get the current comment\r",
-							"let comment = testData.comments[testData.counter];\r",
+							"let loggedInUser = testData.loggedInUser;\r",
+							"\r",
+							"let comments = testData.comments.filter(comment => comment.commentCreated == true);\r",
+							"let comment = comments[testData.counter];\r",
+							"delete comment.commentCreated;\r",
 							"\r",
 							"// Read the response\r",
 							"let response = pm.response;\r",
@@ -1140,19 +1224,19 @@
 							"    console.log(\"responseData\", responseData);\r",
 							"});\r",
 							"\r",
+							"comment.commentCreated = true;\r",
 							"// Update the counter and save the updated test data\r",
 							"testData.counter++;\r",
 							"pm.collectionVariables.set(\"testData\",testData);\r",
 							"\r",
 							"// If there are more comments - then \"loop\"\r",
 							"// through them using setNextRequest\r",
-							"if(testData.comments[testData.counter]){\r",
+							"if(comments[testData.counter]){\r",
 							"    pm.execution.setNextRequest(\"Get comments\");\r",
 							"}\r",
 							"// Otherwise console.log \"All done\"\r",
 							"else {\r",
-							"    console.log(\"All comments have been read correctly.\");\r",
-							"    // IMPORTANT: set counter to 0 in preparation of next request\r",
+							"    console.log(\"All comments have been created.\");\r",
 							"    testData.counter = 0;\r",
 							"    pm.collectionVariables.set(\"testData\",testData);\r",
 							"}"
@@ -1201,9 +1285,15 @@
 					"script": {
 						"exec": [
 							"let testData = pm.collectionVariables.get(\"testData\");\r",
-							"let comment = testData.comments[testData.counter];\r",
+							"let loggedInUser = testData.loggedInUser;\r",
+							"let comments = testData.comments.filter(comment => comment.commentCreated == true);\r",
+							"let comment = comments[testData.counter];\r",
+							"let commentIndex = testData.comments.findIndex(testDataComment => testDataComment.comment == comment.comment);\r",
 							"\r",
-							"comment.comment += \"Some extra text in the comment.\";\r",
+							"comment.comment += \" Some extra text in the comment.\";\r",
+							"\r",
+							"testData.comments[commentIndex] = comment;\r",
+							"\r",
 							"pm.collectionVariables.set(\"testData\", testData);\r",
 							"\r",
 							"pm.variables.set(\"id\", comment.id);\r",
@@ -1218,7 +1308,9 @@
 					"script": {
 						"exec": [
 							"let testData = pm.collectionVariables.get(\"testData\");\r",
-							"let comment = testData.comments[testData.counter];\r",
+							"let loggedInUser = testData.loggedInUser;\r",
+							"let comments = testData.comments.filter(comment => comment.commentCreated == true);\r",
+							"let comment = comments[testData.counter];\r",
 							"\r",
 							"let response = pm.response;\r",
 							"let responseData = pm.response.json();\r",
@@ -1236,7 +1328,7 @@
 							"\r",
 							"// If there are more comments - then \"loop\"\r",
 							"// through them using setNextRequest\r",
-							"if(testData.comments[testData.counter]){\r",
+							"if(comments[testData.counter]){\r",
 							"    pm.execution.setNextRequest(\"Change comments\");\r",
 							"}\r",
 							"// Otherwise console.log \"All done\"\r",
@@ -1290,7 +1382,9 @@
 							"// Get the test data\r",
 							"let testData = pm.collectionVariables.get(\"testData\");\r",
 							"// Get the current comment\r",
-							"let comment = testData.comments[testData.counter];\r",
+							"let comments = testData.comments.filter(comment => comment.commentCreated == true);\r",
+							"let comment = comments[testData.counter];\r",
+							"\r",
 							"// Set  a pm variable to id (used in the URL)\r",
 							"pm.variables.set(\"id\", comment.id);"
 						],
@@ -1302,10 +1396,12 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Get the test data\r",
 							"let testData = pm.collectionVariables.get(\"testData\");\r",
-							"// Get the current comment\r",
-							"let comment = testData.comments[testData.counter];\r",
+							"let loggedInUser = testData.loggedInUser;\r",
+							"\r",
+							"let comments = testData.comments.filter(comment => comment.commentCreated == true);\r",
+							"let comment = comments[testData.counter];\r",
+							"delete comment.commentCreated;\r",
 							"\r",
 							"// Read the response\r",
 							"let response = pm.response;\r",
@@ -1324,21 +1420,30 @@
 							"    console.log(\"responseData\", responseData);\r",
 							"});\r",
 							"\r",
+							"comment.commentCreated = true;\r",
 							"// Update the counter and save the updated test data\r",
 							"testData.counter++;\r",
 							"pm.collectionVariables.set(\"testData\",testData);\r",
 							"\r",
 							"// If there are more comments - then \"loop\"\r",
 							"// through them using setNextRequest\r",
-							"if(testData.comments[testData.counter]){\r",
+							"if(comments[testData.counter]){\r",
 							"    pm.execution.setNextRequest(\"Get comments after change\");\r",
 							"}\r",
 							"// Otherwise console.log \"All done\"\r",
 							"else {\r",
-							"    console.log(\"All comments have been read correctly after the change.\");\r",
-							"    // IMPORTANT: set counter to 0 in preparation of next request\r",
+							"    console.log(\"All comments have been created.\");\r",
 							"    testData.counter = 0;\r",
 							"    pm.collectionVariables.set(\"testData\",testData);\r",
+							"\r",
+							"    if(testData.userCounter == 0)\r",
+							"    {\r",
+							"        pm.execution.setNextRequest(\"Logout\");\r",
+							"    }\r",
+							"    else\r",
+							"    {\r",
+							"        pm.execution.setNextRequest(\"Delete comments\");\r",
+							"    }\r",
 							"}"
 						],
 						"type": "text/javascript",
@@ -1372,6 +1477,47 @@
 						"api",
 						"comments",
 						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login as admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"thomas@nodehill.com\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"login"
 					]
 				}
 			},
@@ -1714,6 +1860,85 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let testData = pm.collectionVariables.get(\"testData\");\r",
+							"// Read the response\r",
+							"let response = pm.response;\r",
+							"// Read the response data\r",
+							"let responseData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"We should get an ok code (code 200) back\", () => {\r",
+							"    pm.expect(response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"testData.userCounter++;\r",
+							"pm.collectionVariables.set(\"testData\", testData);\r",
+							"\r",
+							"// If there are more comments - then \"loop\"\r",
+							"// through them using setNextRequest\r",
+							"\r",
+							"switch(testData.userCounter)\r",
+							"{\r",
+							"    case 1 :\r",
+							"    pm.execution.setNextRequest(\"Login\");\r",
+							"    break;\r",
+							"\r",
+							"    case 2 :\r",
+							"    pm.execution.setNextRequest(\"Create categories\");\r",
+							"    break;\r",
+							"\r",
+							"    case 3 :\r",
+							"    pm.execution.setNextRequest(\"Login as admin\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [
@@ -1723,6 +1948,14 @@
 		},
 		{
 			"key": "testData",
+			"value": ""
+		},
+		{
+			"key": "testData.loggedInUsers[0]",
+			"value": ""
+		},
+		{
+			"key": "testData.loggedInUsers",
 			"value": ""
 		}
 	]
