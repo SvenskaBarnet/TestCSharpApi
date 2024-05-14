@@ -59,7 +59,7 @@ public static class Utils
 
         foreach (var word in badWordsOrdered)
         {
-            textToClean = Regex.Replace(textToClean, word.ToString(), replacementString, RegexOptions.IgnoreCase);
+            textToClean = Regex.Replace(textToClean, $"\\b{word.ToString()}\\b", replacementString, RegexOptions.IgnoreCase);
         }
         return textToClean;
     }

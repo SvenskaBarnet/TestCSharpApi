@@ -67,8 +67,8 @@ public class UtilsTest : IClassFixture<DatabaseFixture>
     [Theory]
     [InlineData(
         "****",
-        "well ****o there Mr.****, I like you****, you seem nice **** don't you, ****?",
-        "well hello there Mr.s_h_i_t, I like youf u c k e r, you seem nice 5h1t don't you, bastArd?"
+        "well hello there Mr ****, I like you ****! you seem like a nice **** don't you, ****?",
+        "well hello there Mr s_h_i_t, I like you f u c k e r! you seem like a nice 5h1t don't you, bastArd?"
     )]
     [InlineData(
         "****",
