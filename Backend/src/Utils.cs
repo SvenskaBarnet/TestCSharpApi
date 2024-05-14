@@ -2,10 +2,15 @@ namespace WebApp;
 public static class Utils
 {
     private readonly static Arr mockUsers = JSON.Parse(File.ReadAllText(FilePath("json", "mock-users.json")));
-  //  private readonly static Arr badWords = JSON.Parse(File.ReadAllText(FilePath("json", "bad-words.json")));
+    private readonly static List<string> badWords = [.. 
+        JsonDocument.Parse(
+        File.ReadAllText(FilePath("json", "bad-words.json")))
+        .RootElement.EnumerateArray().Where(element => element.ValueKind == JsonValueKind.String)
+        .Select(element => element.GetString())
+        .OrderByDescending(word => word.Length)
+        ];
     public static Arr CreateMockUsers()
     {
-
         foreach(var user in mockUsers)
         {
             System.Console.WriteLine(user.ToString());
@@ -60,10 +65,7 @@ public static class Utils
 
     public static string RemoveBadWords(string textToClean, string replacementString)
     {
-        Arr badWords = JSON.Parse(File.ReadAllText(FilePath("json", "bad-words.json")));
-        var badWordsOrdered = badWords.OrderByDescending(word => word.ToString().Length);
-
-        foreach (var word in badWordsOrdered)
+        foreach (var word in badWords)
         {
             textToClean = Regex.Replace(textToClean, $"\\b{word.ToString()}\\b", replacementString, RegexOptions.IgnoreCase);
         }
