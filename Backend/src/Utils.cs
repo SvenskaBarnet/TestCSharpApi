@@ -1,11 +1,10 @@
 namespace WebApp;
 public static class Utils
 {
+    private readonly static Arr mockUsers = JSON.Parse(File.ReadAllText(FilePath("json", "mock-users.json")));
+  //  private readonly static Arr badWords = JSON.Parse(File.ReadAllText(FilePath("json", "bad-words.json")));
     public static Arr CreateMockUsers()
     {
-        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
-        Arr mockUsers = JSON.Parse(read);
-
         Arr successfullyWrittenUsers = Arr();
         foreach (var user in mockUsers)
         {
@@ -27,8 +26,6 @@ public static class Utils
 
     public static Arr RemoveMockUsers()
     {
-        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
-        Arr mockUsers = JSON.Parse(read);
         Arr usersInDb = SQLQuery("SELECT email FROM users");
         Arr emailsInDb = usersInDb.Map(user => user.email);
         Arr mockUsersInDb = mockUsers.Filter(mockUser => emailsInDb.Contains(mockUser.email));
@@ -39,7 +36,6 @@ public static class Utils
             SQLQueryOne("DELETE FROM users WHERE email = $email", user);
             deletedMockUsers.Push(user);
         }
-
         return deletedMockUsers;
     }
 
@@ -53,14 +49,13 @@ public static class Utils
             password.Any(ch => !char.IsLetterOrDigit(ch)),
             password.Any(char.IsDigit),
         ];
-        
         return !bools.Contains(false);
     }
 
     public static string RemoveBadWords(string textToClean, string replacementString)
     {
         var read = File.ReadAllText(FilePath("json", "bad-words.json"));
-        Arr badWords = JSON.Parse(read).badwords;
+        Arr badWords = JSON.Parse(read);
         var badWordsOrdered = badWords.OrderByDescending(word => word.ToString().Length);
         string cleanText = textToClean;
 
@@ -68,7 +63,6 @@ public static class Utils
         {
             cleanText = Regex.Replace(cleanText, word.ToString(), replacementString, RegexOptions.IgnoreCase);
         }
-
         return cleanText;
     }
 
