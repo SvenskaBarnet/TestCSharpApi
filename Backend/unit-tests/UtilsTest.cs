@@ -53,14 +53,15 @@ public class UtilsTest : IClassFixture<DatabaseFixture>
     }
 
     [Theory]
-    [InlineData("aA!1234")]
-    [InlineData("aa!12345")]
-    [InlineData("AA!12345")]
-    [InlineData("aA123456")]
-    [InlineData("aA!bcdef")]
-    public void TestIsPasswordGoodEnough(string password)
+    [InlineData("aA!1234", false)]
+    [InlineData("aa!12345", false)]
+    [InlineData("AA!12345", false)]
+    [InlineData("aA123456", false)]
+    [InlineData("aA!bcdef", false)]
+    [InlineData("aA!12345", true)]
+    public void TestIsPasswordGoodEnough(string password, bool expected)
     {
-        Assert.False(Utils.IsPasswordGoodEnough(password));
+        Assert.Equal(expected, Utils.IsPasswordGoodEnough(password));
     }
 
     [Fact]
