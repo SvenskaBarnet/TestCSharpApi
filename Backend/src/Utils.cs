@@ -5,6 +5,12 @@ public static class Utils
   //  private readonly static Arr badWords = JSON.Parse(File.ReadAllText(FilePath("json", "bad-words.json")));
     public static Arr CreateMockUsers()
     {
+
+        foreach(var user in mockUsers)
+        {
+            System.Console.WriteLine(user.ToString());
+        }
+        
         Arr successfullyWrittenUsers = Arr();
         foreach (var user in mockUsers)
         {
