@@ -64,13 +64,20 @@ public class UtilsTest : IClassFixture<DatabaseFixture>
         Assert.Equal(expected, Utils.IsPasswordGoodEnough(password));
     }
 
-    [Fact]
-    public void TestRemoveBadWord()
+    [Theory]
+    [InlineData(
+        "****",
+        "well ****o there Mr.****, I like you****, you seem nice **** don't you, ****?",
+        "well hello there Mr.s_h_i_t, I like youf u c k e r, you seem nice 5h1t don't you, bastArd?"
+    )]
+    [InlineData(
+        "****",
+        "Check it out now, fuNk-soul-brother",
+        "Check it out now, fuNk-soul-brother"
+    )]
+    public void TestRemoveBadWord(string replacementString, string expected, string textToClean)
     {
-        Assert.Equal("well ****o there Mr.****, I like you****, you seem nice **** don't you, ****?", 
-            Utils.RemoveBadWords("well hello there Mr.s_h_i_t, I like youf u c k e r, you seem nice 5h1t don't you, bastArd?", "****"
-            ));
-        Assert.Equal("Check it out now, fuNk-soul-brother", Utils.RemoveBadWords("Check it out now, fuNk-soul-brother", "****"));
+        Assert.Equal(expected, Utils.RemoveBadWords(textToClean, replacementString)); 
     }
 
     [Fact]

@@ -54,16 +54,14 @@ public static class Utils
 
     public static string RemoveBadWords(string textToClean, string replacementString)
     {
-        var read = File.ReadAllText(FilePath("json", "bad-words.json"));
-        Arr badWords = JSON.Parse(read);
+        Arr badWords = JSON.Parse(File.ReadAllText(FilePath("json", "bad-words.json")));
         var badWordsOrdered = badWords.OrderByDescending(word => word.ToString().Length);
-        string cleanText = textToClean;
 
         foreach (var word in badWordsOrdered)
         {
-            cleanText = Regex.Replace(cleanText, word.ToString(), replacementString, RegexOptions.IgnoreCase);
+            textToClean = Regex.Replace(textToClean, word.ToString(), replacementString, RegexOptions.IgnoreCase);
         }
-        return cleanText;
+        return textToClean;
     }
 
     public static Obj CountDomainsFromUserEmails()
