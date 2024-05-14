@@ -49,7 +49,7 @@ public static class Utils
     {
         List<bool> bools =
         [
-            password.Length > 7,
+            password.Length >= 8,
             password.Any(char.IsUpper),
             password.Any(char.IsLower),
             password.Any(ch => !char.IsLetterOrDigit(ch)),
