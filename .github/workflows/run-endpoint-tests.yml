@@ -42,6 +42,6 @@ jobs:
         cwd: ./endpoint-tests
         command: npm test
         command-windows: npm test
-        start: dotnet run
+        start: dotnet run --project Backend
         wait-on: 'http://localhost:3001'
         
