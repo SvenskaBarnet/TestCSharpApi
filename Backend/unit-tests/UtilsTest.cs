@@ -1,5 +1,4 @@
 namespace WebApp;
-
 public class UtilsTest() : IClassFixture<CopyDatabase>
 {
     [Fact]
@@ -17,7 +16,7 @@ public class UtilsTest() : IClassFixture<CopyDatabase>
             mockUser => !emailsInDb.Contains(mockUser.email)
         );
 
-        Assert.Equivalent(mockUsersNotInDb, Utils.CreateMockUsers());
+        Assert.Equivalent(mockUsersNotInDb, Utils.CreateMockUsers(), true);
     }
 
     [Fact]
@@ -25,17 +24,14 @@ public class UtilsTest() : IClassFixture<CopyDatabase>
     {
         var read = File.ReadAllText(FilePath("json", "mock-users.json"));
         Arr mockUsers = JSON.Parse(read);
-        Arr usersToBeRemoved = Arr();
 
-        foreach (var user in mockUsers)
-        {
-            Obj userExists = SQLQueryOne("SELECT * FROM users WHERE id = 1");
-            if(userExists != null)
-            {
-                usersToBeRemoved.Push(userExists);
-            }
-        }
-        Assert.Equivalent(usersToBeRemoved, Utils.RemoveMockUsers());
+        Arr usersInDb = SQLQuery("SELECT * FROM users");
+        Arr emailsInDb = usersInDb.Map(user => user.email);
+        Arr usersToBeRemoved = mockUsers.Filter(mockUser => emailsInDb.Contains(mockUser.email));
+
+        var result = Utils.RemoveMockUsers();
+
+        Assert.Equivalent(usersToBeRemoved, result, true);
     }
 
     [Theory]

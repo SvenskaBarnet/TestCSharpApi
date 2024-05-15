@@ -28,7 +28,6 @@ public static class Utils
                 ", user);
                 if (!result.HasKey("error"))
                 {
-                    user.Delete("password");
                     successfullyWrittenUsers.Push(user);
                 }
             }
