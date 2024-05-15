@@ -40,7 +40,7 @@ jobs:
       uses: BerniWittmann/background-server-action@v1
       with:
         command: npm test
-        command-windows: npm test
-        start: dotnet run
+        command-windows: npm test --prefix ./endpoint-tests
+        start: dotnet run --project Backend
         wait-on: 'http://localhost:3001'
         
