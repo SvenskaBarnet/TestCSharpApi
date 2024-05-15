@@ -1,14 +1,11 @@
 namespace WebApp;
 public class UtilsTest() : IClassFixture<CopyDatabase>
 {
+    private readonly static Arr mockUsers = JSON.Parse(File.ReadAllText(FilePath("json", "mock-users.json")));
+
     [Fact]
     public void TestCreateMockUsers()
     {
-        //read all mock users from json-file
-        var read = File.ReadAllText(FilePath("json","mock-users.json"));
-        Arr mockUsers = JSON.Parse(read);
-
-        // Get all users from database
         Arr usersInDb = SQLQuery("SELECT email FROM users");
         Arr emailsInDb = usersInDb.Map(user => user.email);
         
@@ -22,9 +19,6 @@ public class UtilsTest() : IClassFixture<CopyDatabase>
     [Fact]
     public void TestRemoveMockUsers()
     {
-        var read = File.ReadAllText(FilePath("json", "mock-users.json"));
-        Arr mockUsers = JSON.Parse(read);
-
         Arr usersInDb = SQLQuery("SELECT * FROM users");
         Arr emailsInDb = usersInDb.Map(user => user.email);
         Arr usersToBeRemoved = mockUsers.Filter(mockUser => emailsInDb.Contains(mockUser.email));
