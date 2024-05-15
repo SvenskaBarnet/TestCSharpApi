@@ -1,5 +1,5 @@
 namespace WebApp;
-public class UtilsTest() : IClassFixture<CopyDatabase>
+public class UtilsTest() : IClassFixture<DatabaseFixture>
 {
     private readonly static Arr mockUsers = JSON.Parse(File.ReadAllText(FilePath("json", "mock-users.json")));
 

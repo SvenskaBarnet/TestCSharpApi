@@ -1,9 +1,9 @@
 namespace WebApp;
 
-public class CopyDatabase : IDisposable
+public class DatabaseFixture: IDisposable
 {
     private string dbTemplatePath = FilePath("DbTemplate", "_db.sqlite3").Regplace(Regex.Escape("Backend\\"), "");
-    public CopyDatabase()
+    public DatabaseFixture()
     {
         File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
     }
