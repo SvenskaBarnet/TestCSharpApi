@@ -1,6 +1,6 @@
 namespace WebApp;
 
-public class UtilsTest() : IClassFixture<CopyDatabase>
+public class UtilsTest(Xlog Console) : IClassFixture<CopyDatabase>
 {
     [Fact]
     public void TestCreateMockUsers()
