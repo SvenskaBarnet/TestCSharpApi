@@ -1,6 +1,6 @@
 namespace WebApp;
 
-public class UtilsTest(Xlog Console) : IClassFixture<CopyDatabase>
+public class UtilsTest() : IClassFixture<CopyDatabase>
 {
     [Fact]
     public void TestCreateMockUsers()
@@ -83,7 +83,6 @@ public class UtilsTest(Xlog Console) : IClassFixture<CopyDatabase>
                 domainsInDb[domain]++;
             }
         }
-         
         Assert.Equivalent(domainsInDb, Utils.CountDomainsFromUserEmails());
     }
 }
