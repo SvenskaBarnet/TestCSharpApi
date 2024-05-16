@@ -1,10 +1,10 @@
-name: Run unit tests 
+name: Run endpoint tests 
 
 on:
   push:
-    branches: [ "feature-unit-testing" ]
+    branches: [ "feature-endpoint-testing" ]
   pull_request:
-    branches: [ "feature-unit-testing" ]
+    branches: [ "feature-endpoint-testing" ]
 
 jobs:
 
@@ -36,6 +36,11 @@ jobs:
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test --logger "console;verbosity=detailed"
+    - name: Run endpoint tests
+      uses: BerniWittmann/background-server-action@v1
+      with:
+        command: npm test
+        command-windows: npm test --prefix ./endpoint-tests
+        start: dotnet run --project Backend
+        wait-on: 'http://localhost:3001'
+        
