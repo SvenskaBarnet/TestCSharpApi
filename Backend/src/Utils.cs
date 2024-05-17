@@ -12,11 +12,6 @@ public static class Utils
         ];
     public static Arr CreateMockUsers()
     {
-        foreach(var user in mockUsers)
-        {
-            System.Console.WriteLine(user.ToString());
-        }
-        
         Arr successfullyWrittenUsers = Arr();
         foreach (var user in mockUsers)
         {
