@@ -13,5 +13,5 @@ Then('I should see the product {string}', (product) => {
 });
 
 Then('I should not see the product {string}', (product) => {
-  cy.get('.product .name').contains(product);
+  cy.get('.product .name').should('not.include.text', product);
 });
