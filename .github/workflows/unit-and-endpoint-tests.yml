@@ -1,4 +1,4 @@
-name: Run unit and endpoint tests 
+name: Unit and endpoint tests 
 
 on:
   push:
@@ -15,11 +15,11 @@ jobs:
         configuration: [Debug]
 
     runs-on: windows-latest  
-
+                            
     env:
       Solution_Name: Backend.sln
       Test_Project_Path: Backend
-
+  
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -36,11 +36,16 @@ jobs:
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
 
-    - name: Run endpoint tests
-      uses: BerniWittmann/background-server-action@v1
-      with:
-        command: npm test
-        command-windows: npm test --prefix ./endpoint-tests
-        start: dotnet run --project Backend
-        wait-on: 'http://localhost:3001'
-        
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test --logger "console;verbosity=detailed"
+    
+    # Start backend non-blocking
+    - name: Start the backend
+      shell: bash
+      run: cd Backend && nohup dotnet run &
+
+    # Run the endpoint tests
+    - name: Run the endpoint tests
+      shell: bash
+      run: cd endpoint-tests && npm test
