@@ -1,8 +1,8 @@
 {
   "scripts": {
     "make-steps": "node _auto-generate-step-definitions.js",
-    "test-ui": "cypress open --browser chrome",
-    "test-ui-cli": "cypress run --browser chrome"
+    "test-ui": "cypress open --browser firefox:dev",
+    "test-ui-cli": "cypress run --browser firefox:dev"
   },
   "cypress-cucumber-preprocessor": {
     "json": {

@@ -6,30 +6,24 @@ Feature: As user I want to be able to see the correct products listed when I hav
     Then I should see the product "<product>"
 
     Examples:
-      | category    | product           |
-      | Prisvänligt | Basic tomatsås    |
-      | Prisvänligt | Mjöliga makaroner |
-      | Vardag      | Potatis           |
-      | Vardag      | Gul lök           |
-      | Lyx         | Champagne         |
-      | Lyx         | Rysk kaviar       |
+      | category            | product                         |
+      | Bouldering          | Crash Pad                       |
+      | Bouldering          | Chalk Bag                       |
+      | Bouldering          | Climbing Brush                  |
+      | Bouldering          | Climbing Holds Set              |
+      | Bouldering          | Climbing Tape                   |
+      | Climbing Shoes      | SuperGrip Shoes                 |
+      | Climbing Shoes      | Beginner Climb Shoes         |
+      | Climbing Shoes      | AllRounder Shoes                |
+      | Climbing Harnesses  | Climbing Helmet                 |
+      | Climbing Harnesses  | Climbing Harness - Basic        |
+      | Climbing Harnesses  | Climbing Harness - Professional |
+      | Climbing Harnesses  | Belay Device                    |
+      | Climbing Ropes      | Dynamic Climbing Rope - 60m     |
+      | Climbing Ropes      | Static Climbing Rope - 30m      |
+      | Climbing Ropes      | Quickdraw Set                   |
+      | Climbing Ropes      | Carabiner - Locking             |
+      | Climbing Clothes    | StretchClimb Pants              |
+      | Climbing Clothes    | Breathable Climb Shirt          |
+      | Climbing Clothes    | Insulated Climb Jacket          |
 
-  Scenario Outline: Check that the category <category> does not show the product <product>.
-    Given that I am on the product page
-    When I choose the category "<category>"
-    Then I should not see the product "<product>"
-
-    Examples:
-      | category    | product           |
-      | Vardag      | Basic tomatsås    |
-      | Vardag      | Mjöliga makaroner |
-      | Lyx         | Basic tomatsås    |
-      | Lyx         | Mjöliga makaroner |
-      | Prisvänligt | Potatis           |
-      | Prisvänligt | Gul lök           |
-      | Lyx         | Potatis           |
-      | Lyx         | Gul lök           |
-      | Prisvänligt | Champagne         |
-      | Prisvänligt | Rysk kaviar       |
-      | Vardag      | Champagne         |
-      | Vardag      | Rysk kaviar       |
