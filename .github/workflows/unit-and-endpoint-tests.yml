@@ -1,10 +1,10 @@
-name: Run endpoint tests 
+name: Run unit and endpoint tests 
 
 on:
   push:
-    branches: [ "feature-endpoint-testing" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "feature-endpoint-testing" ]
+    branches: [ "dev" ]
 
 jobs:
 
