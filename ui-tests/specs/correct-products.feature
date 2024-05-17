@@ -1,50 +1,52 @@
 Feature: As user I want to be able to see the correct products listed when I have chosen a category so that I can easily filter the product list by category.
 
-  Scenario Outline: Check that the category <category> shows the product <product>.
+  Scenario Outline: Check that the category <category> shows the product <product> with the price <price> and the description '<description>'.
     Given that I am on the product page
     When I choose the category "<category>"
-    Then I should see the product "<product>"
+    Then I should see the product "<product>" 
+    And The product "<product>" should have the price "<price>" 
+    And The product "<product>" should have the description "<description>"
 
     Examples:
-      | category           | product                         |
-      | Bouldering         | Crash Pad                       |
-      | Bouldering         | Chalk Bag                       |
-      | Bouldering         | Climbing Brush                  |
-      | Bouldering         | Climbing Holds Set              |
-      | Bouldering         | Climbing Tape                   |
-      | Climbing Shoes     | SuperGrip Shoes                 |
-      | Climbing Shoes     | Beginner Climb Shoes            |
-      | Climbing Shoes     | AllRounder Shoes                |
-      | Climbing Harnesses | Climbing Helmet                 |
-      | Climbing Harnesses | Climbing Harness - Basic        |
-      | Climbing Harnesses | Climbing Harness - Professional |
-      | Climbing Harnesses | Belay Device                    |
-      | Climbing Ropes     | Dynamic Climbing Rope - 60m     |
-      | Climbing Ropes     | Static Climbing Rope - 30m      |
-      | Climbing Ropes     | Quickdraw Set                   |
-      | Climbing Ropes     | Carabiner - Locking             |
-      | Climbing Clothes   | StretchClimb Pants              |
-      | Climbing Clothes   | Breathable Climb Shirt          |
-      | Climbing Clothes   | Insulated Climb Jacket          |
-      | Alla               | Crash Pad                       |
-      | Alla               | Chalk Bag                       |
-      | Alla               | Climbing Brush                  |
-      | Alla               | Climbing Holds Set              |
-      | Alla               | Climbing Tape                   |
-      | Alla               | SuperGrip Shoes                 |
-      | Alla               | Beginner Climb Shoes            |
-      | Alla               | AllRounder Shoes                |
-      | Alla               | Climbing Helmet                 |
-      | Alla               | Climbing Harness - Basic        |
-      | Alla               | Climbing Harness - Professional |
-      | Alla               | Belay Device                    |
-      | Alla               | Dynamic Climbing Rope - 60m     |
-      | Alla               | Static Climbing Rope - 30m      |
-      | Alla               | Quickdraw Set                   |
-      | Alla               | Carabiner - Locking             |
-      | Alla               | StretchClimb Pants              |
-      | Alla               | Breathable Climb Shirt          |
-      | Alla               | Insulated Climb Jacket          |
+      | category           | product                         | price | description                                                                        |
+      | Bouldering         | Crash Pad                       | 2000  | Large foam pad used to protect climbers from falls while bouldering.               |
+      | Bouldering         | Chalk Bag                       | 150   | A bag used to hold chalk, keeping climber's hands dry and improving grip.          |
+      | Bouldering         | Climbing Brush                  | 65    | A brush used to clean holds and remove excess chalk and dirt from climbing routes. |
+      | Bouldering         | Climbing Holds Set              | 2500  | Set of artificial climbing holds for building indoor climbing routes.              |
+      | Bouldering         | Climbing Tape                   | 75    | Specialized tape used to protect skin and prevent injuries while climbing.         |
+      | Climbing Shoes     | SuperGrip Shoes                 | 1200  | Shoes with superior grip for advanced climbers                                     |
+      | Climbing Shoes     | Beginner Climb Shoes            | 600   | Comfortable and supportive shoes for beginners                                     |
+      | Climbing Shoes     | AllRounder Shoes                | 1000  | Versatile shoes suitable for all types of climbing                                 |
+      | Climbing Harnesses | Climbing Helmet                 | 465   | Protective headgear designed to protect climbers from falling debris.              |
+      | Climbing Harnesses | Climbing Harness - Basic        | 890   | Entry-level climbing harness for beginner climbers.                                |
+      | Climbing Harnesses | Climbing Harness - Professional | 1600  | Advanced climbing harness with additional features for experienced climbers.       |
+      | Climbing Harnesses | Belay Device                    | 700   | Device used to control the rope during belaying, lowering, or rappelling.          |
+      | Climbing Ropes     | Dynamic Climbing Rope - 60m     | 1200  | Dynamic rope suitable for lead climbing and top-roping.                            |
+      | Climbing Ropes     | Static Climbing Rope - 30m      | 870   | Static rope ideal for rappelling and rescue operations.                            |
+      | Climbing Ropes     | Quickdraw Set                   | 900   | Set of quickdraws used to connect the rope to bolts on the climbing route.         |
+      | Climbing Ropes     | Carabiner - Locking             | 240   | Locking carabiner for securing critical climbing equipment.                        |
+      | Climbing Clothes   | StretchClimb Pants              | 1100  | Stretchable pants providing flexibility and durability                             |
+      | Climbing Clothes   | Breathable Climb Shirt          | 650   | Lightweight and breathable shirt for climbers                                      |
+      | Climbing Clothes   | Insulated Climb Jacket          | 2300  | Jacket with insulation for colder climbs                                           |
+      | Alla               | Crash Pad                       | 2000  | Large foam pad used to protect climbers from falls while bouldering.               |
+      | Alla               | Chalk Bag                       | 150   | A bag used to hold chalk, keeping climber's hands dry and improving grip.          |
+      | Alla               | Climbing Brush                  | 65    | A brush used to clean holds and remove excess chalk and dirt from climbing routes. |
+      | Alla               | Climbing Holds Set              | 2500  | Set of artificial climbing holds for building indoor climbing routes.              |
+      | Alla               | Climbing Tape                   | 75    | Specialized tape used to protect skin and prevent injuries while climbing.         |
+      | Alla               | SuperGrip Shoes                 | 1200  | Shoes with superior grip for advanced climbers                                     |
+      | Alla               | Beginner Climb Shoes            | 600   | Comfortable and supportive shoes for beginners                                     |
+      | Alla               | AllRounder Shoes                | 1000  | Versatile shoes suitable for all types of climbing                                 |
+      | Alla               | Climbing Helmet                 | 465   | Protective headgear designed to protect climbers from falling debris.              |
+      | Alla               | Climbing Harness - Basic        | 890   | Entry-level climbing harness for beginner climbers.                                |
+      | Alla               | Climbing Harness - Professional | 1600  | Advanced climbing harness with additional features for experienced climbers.       |
+      | Alla               | Belay Device                    | 700   | Device used to control the rope during belaying, lowering, or rappelling.          |
+      | Alla               | Dynamic Climbing Rope - 60m     | 1200  | Dynamic rope suitable for lead climbing and top-roping.                            |
+      | Alla               | Static Climbing Rope - 30m      | 870   | Static rope ideal for rappelling and rescue operations.                            |
+      | Alla               | Quickdraw Set                   | 900   | Set of quickdraws used to connect the rope to bolts on the climbing route.         |
+      | Alla               | Carabiner - Locking             | 240   | Locking carabiner for securing critical climbing equipment.                        |
+      | Alla               | StretchClimb Pants              | 1100  | Stretchable pants providing flexibility and durability                             |
+      | Alla               | Breathable Climb Shirt          | 650   | Lightweight and breathable shirt for climbers                                      |
+      | Alla               | Insulated Climb Jacket          | 2300  | Jacket with insulation for colder climbs                                           |
 
 
   Scenario Outline: Check that the category <category> does not shows the product <product>.
