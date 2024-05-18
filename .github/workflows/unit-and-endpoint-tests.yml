@@ -32,7 +32,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
         cache: true
-    - run: cd Backend && dotnet restore --locked-mode  
+    - run: dotnet restore --locked-mode  
 
     # Copy database from DbTemplate to Backend
 #    - name: Copy database to project
