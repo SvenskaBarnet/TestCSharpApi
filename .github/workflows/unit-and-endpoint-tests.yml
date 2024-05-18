@@ -43,7 +43,7 @@ jobs:
     # Start backend non-blocking
     - name: Start the backend
       shell: bash
-      run: cd Backend && nohub dotnet run & 
+      run: cd Backend && nohup dotnet run & 
 
     # Run the endpoint tests
     - name: Run the endpoint tests
