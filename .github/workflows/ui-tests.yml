@@ -45,7 +45,7 @@ jobs:
       run: |
         timeout=120
         timer=0
-        while [[ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:5000)" != "200" ]]; do
+        while [[ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3001)" != "200" ]]; do
           if [ $timer -ge $timeout ]; then
             echo "Backend did not start in time"
             cat Backend/output.log
@@ -61,5 +61,5 @@ jobs:
       shell: bash
       run: |
         cd ui-tests
-        npx wait-on http://localhost:5000
+        npx wait-on http://localhost:3001
         npm run test-ui-cli
