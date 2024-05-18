@@ -42,7 +42,7 @@ jobs:
     
     # Start backend non-blocking
     - name: Start the backend
-      run: cd Backend && Start-ThreadJob {dotnet run}
+      run: cd Backend && Start-Job {dotnet run}
 
     # Run the endpoint tests
     - name: Run the endpoint tests
