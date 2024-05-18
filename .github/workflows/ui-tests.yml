@@ -1,4 +1,4 @@
-name: UI tests 
+name: UI tests
 
 on:
   push:
@@ -7,45 +7,66 @@ on:
     branches: [ "feature-ui-testing" ]
 
 jobs:
-
   build:
-
-    strategy:
-      matrix:
-        configuration: [Debug]
-
-    runs-on: windows-latest  
-                            
+    runs-on: windows-latest
+    
     env:
       Solution_Name: Backend.sln
       Test_Project_Path: Backend
-  
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
-    # Cache and install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    # Copy database from DbTemplate to Backend
     - name: Copy database to project
-      run: copy DbTemplate\\_db.sqlite3 Backend
+      run: Copy-Item DbTemplate\\_db.sqlite3 Backend
 
-    # Install Cypress
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '14'
+
     - name: Install Cypress
-      run: cd ui-tests && npm install
+      run: |
+        cd ui-tests
+        npm install
 
-    # Start backend non-blocking
     - name: Start the backend
-      shell: bash
-      run: cd Backend && nohup dotnet run & 
+      run: |
+        cd Backend
+        Start-Process -FilePath dotnet -ArgumentList 'run' -NoNewWindow -PassThru
 
-    # Run the endpoint tests
+    - name: Wait for backend to be ready
+      run: |
+        $timeout = 120
+        $timer = 0
+        while ($timer -lt $timeout) {
+          try {
+            $response = Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing
+            if ($response.StatusCode -eq 200) {
+              Write-Host "Backend is ready"
+              break
+            }
+          } catch {
+            Write-Host "Waiting for backend..."
+          }
+          Start-Sleep -Seconds 5
+          $timer += 5
+        }
+        if ($timer -ge $timeout) {
+          Write-Error "Backend did not start in time"
+          exit 1
+        }
+
     - name: Run the endpoint tests
-      shell: bash
-      run: cd ui-tests && npm run test-ui-cli 
+      run: |
+        cd ui-tests
+        npx wait-on http://localhost:3001
+        npm run test-ui-cli
