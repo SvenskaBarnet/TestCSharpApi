@@ -26,12 +26,8 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Copy database to project
-      run: Copy-Item DbTemplate\\_db.sqlite3 Backend
-
-    - name: Install Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '14'
+      run: |
+        Copy-Item DbTemplate\\_db.sqlite3 Backend
 
     - name: Install Cypress
       run: |
@@ -39,34 +35,31 @@ jobs:
         npm install
 
     - name: Start the backend
+      shell: bash
       run: |
         cd Backend
-        Start-Process -FilePath dotnet -ArgumentList 'run' -NoNewWindow -PassThru
+        nohup dotnet run > output.log 2>&1 &
 
     - name: Wait for backend to be ready
+      shell: bash
       run: |
-        $timeout = 120
-        $timer = 0
-        while ($timer -lt $timeout) {
-          try {
-            $response = Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing
-            if ($response.StatusCode -eq 200) {
-              Write-Host "Backend is ready"
-              break
-            }
-          } catch {
-            Write-Host "Waiting for backend..."
-          }
-          Start-Sleep -Seconds 5
-          $timer += 5
-        }
-        if ($timer -ge $timeout) {
-          Write-Error "Backend did not start in time"
-          exit 1
-        }
+        timeout=120
+        timer=0
+        while [[ "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:5000)" != "200" ]]; do
+          if [ $timer -ge $timeout ]; then
+            echo "Backend did not start in time"
+            cat Backend/output.log
+            exit 1
+          fi
+          echo "Waiting for backend..."
+          sleep 5
+          timer=$((timer + 5))
+        done
+        echo "Backend is ready"
 
     - name: Run the endpoint tests
+      shell: bash
       run: |
         cd ui-tests
-        npx wait-on http://localhost:3001
+        npx wait-on http://localhost:5000
         npm run test-ui-cli
