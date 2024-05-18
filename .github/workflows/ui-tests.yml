@@ -36,7 +36,8 @@ jobs:
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
 
-    - name: Install cypress
+    # Install Cypress
+    - name: Install Cypress
       run: cd ui-tests && npm install
 
     # Start backend non-blocking
@@ -46,4 +47,5 @@ jobs:
 
     # Run the endpoint tests
     - name: Run the endpoint tests
+      shell: bash
       run: cd ui-tests && npm run test-ui-cli 
