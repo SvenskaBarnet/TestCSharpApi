@@ -31,8 +31,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        cache: true
-    - run: dotnet restore --locked-mode  
 
     # Copy database from DbTemplate to Backend
 #    - name: Copy database to project
