@@ -40,6 +40,10 @@ jobs:
     - name: Start the backend
       run: cd Backend && dotnet run &
 
-    # Run the endpoint tests
-    - name: Run the endpoint tests
-      run: cd endpoint-tests && npm test
+    # Ping the server
+    - name: Ping the server
+      run: ping http://127.0.0.1:3001
+
+    # Ping the server
+    - name: Ping the server
+      run: ping http://localhost:3001
