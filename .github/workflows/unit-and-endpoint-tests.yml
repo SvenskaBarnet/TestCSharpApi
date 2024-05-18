@@ -26,7 +26,7 @@ jobs:
       with:
         fetch-depth: 0
 
-    # Install the .NET Core workload
+    # Cache and install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
@@ -43,9 +43,8 @@ jobs:
     # Start backend non-blocking
     - name: Start the backend
       shell: bash
-      run: cd Backend && nohup dotnet run &
+      run: cd Backend && nohup dotnet run & 
 
     # Run the endpoint tests
     - name: Run the endpoint tests
-      shell: bash
       run: cd endpoint-tests && npm test
