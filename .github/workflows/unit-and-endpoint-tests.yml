@@ -1,10 +1,10 @@
-name: endpoint tests 
+name: Unit and endpoint tests 
 
 on:
   push:
-    branches: [ "feature-endpoint-testing" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "feature-endpoint-testing" ]
+    branches: [ "dev" ]
 
 jobs:
 
@@ -36,9 +36,13 @@ jobs:
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
 
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test --logger "console;verbosity=detailed"
+    
     # Start backend non-blocking
     - name: Start the backend
-      run: cd Backend && dotnet run &
+      run: cd Backend && dotnet run
 
     # Run the endpoint tests
     - name: Run the endpoint tests
