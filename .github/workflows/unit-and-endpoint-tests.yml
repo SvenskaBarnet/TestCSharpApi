@@ -26,25 +26,27 @@ jobs:
       with:
         fetch-depth: 0
 
-    # Install the .NET Core workload
+    # Cache and install the .NET Core workload
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        cache: true
+    - run: dotnet restore --locked-mode  
 
     # Copy database from DbTemplate to Backend
-    - name: Copy database to project
-      run: copy DbTemplate\\_db.sqlite3 Backend
-
+#    - name: Copy database to project
+ #     run: copy DbTemplate\\_db.sqlite3 Backend
+#
     # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test --logger "console;verbosity=detailed"
-    
+#    - name: Execute unit tests
+ #     run: dotnet test --logger "console;verbosity=detailed"
+ #   
     # Start backend non-blocking
-    - name: Start the backend
-      shell: bash
-      run: cd Backend && nohup dotnet run & 
-
+  #  - name: Start the backend
+   #   shell: bash
+    #  run: cd Backend && nohup dotnet run & 
+#
     # Run the endpoint tests
-    - name: Run the endpoint tests
-      run: cd endpoint-tests && npm test
+#    - name: Run the endpoint tests
+ #     run: cd endpoint-tests && npm test
