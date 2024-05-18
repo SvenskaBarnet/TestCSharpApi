@@ -46,5 +46,4 @@ jobs:
 
     # Run the endpoint tests
     - name: Run the endpoint tests
-      shell: bash
       run: cd endpoint-tests && npm test
