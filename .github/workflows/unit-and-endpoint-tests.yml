@@ -33,18 +33,18 @@ jobs:
         dotnet-version: 8.0.x
 
     # Copy database from DbTemplate to Backend
-#    - name: Copy database to project
- #     run: copy DbTemplate\\_db.sqlite3 Backend
-#
+    - name: Copy database to project
+      run: copy DbTemplate\\_db.sqlite3 Backend
+
     # Execute all unit tests in the solution
-#    - name: Execute unit tests
- #     run: dotnet test --logger "console;verbosity=detailed"
- #   
+    - name: Execute unit tests
+      run: dotnet test --logger "console;verbosity=detailed"
+    
     # Start backend non-blocking
-  #  - name: Start the backend
-   #   shell: bash
-    #  run: cd Backend && nohup dotnet run & 
-#
+    - name: Start the backend
+      shell: bash
+      run: cd Backend && nohup dotnet run & 
+
     # Run the endpoint tests
-#    - name: Run the endpoint tests
- #     run: cd endpoint-tests && npm test
+    - name: Run the endpoint tests
+      run: cd endpoint-tests && npm test
