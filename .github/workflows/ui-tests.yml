@@ -61,5 +61,4 @@ jobs:
       shell: bash
       run: |
         cd ui-tests
-        npx wait-on http://localhost:3001
         npm run test-ui-cli
