@@ -60,3 +60,4 @@ jobs:
     # Run the UI tests
     - name: Run the UI tests
       run: cd ui-tests && npm run test-ui-cli
+      
