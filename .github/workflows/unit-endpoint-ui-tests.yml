@@ -42,8 +42,8 @@ jobs:
           /ui-tests
         key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
-      if: ${{ steps.cache-cypress.outputs.cache-hit != 'true'}}
     - name: Install Cypress
+      if: ${{ steps.cache-cypress.outputs.cache-hit != 'true'}}
       run: cd ui-tests && npm ci
 
     # Copy database from DbTemplate to Backend
