@@ -36,7 +36,7 @@ jobs:
     - name: Install Cypress 
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '20.11.1'
         cache: 'npm'
         cache-dependency-path: ui-tests/package-lock.json
     - run: npm ci
