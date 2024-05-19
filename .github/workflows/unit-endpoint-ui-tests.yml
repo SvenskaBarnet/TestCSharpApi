@@ -38,7 +38,8 @@ jobs:
       with:
         working-directory: ui-tests
         build: npm install
-         
+        runTests: false
+
     # Copy database from DbTemplate to Backend
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
