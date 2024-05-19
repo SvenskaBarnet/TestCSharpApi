@@ -32,15 +32,22 @@ public static class Utils
 
     public static Arr RemoveMockUsers()
     {
-        Arr usersInDb = SQLQuery("SELECT email FROM users");
-        Arr emailsInDb = usersInDb.Map(user => user.email);
-        Arr mockUsersInDb = mockUsers.Filter(mockUser => emailsInDb.Contains(mockUser.email));
-        Arr deletedMockUsers = Arr();
+        Arr usersInDb = SQLQuery("SELECT * FROM users");
 
+        Arr mockUserEmails = Arr();
+        mockUsers.ForEach(mockUser => mockUserEmails.Push(mockUser.email));
+
+        Arr mockUsersInDb = usersInDb.Filter(user => mockUserEmails.Contains(user.email));
+
+        Arr deletedMockUsers = Arr();
         foreach (var user in mockUsersInDb)
         {
-            SQLQueryOne("DELETE FROM users WHERE email = $email", user);
-            deletedMockUsers.Push(user);
+            var result = SQLQueryOne("DELETE FROM users WHERE email = $email", user);
+            if(result.rowsAffected != 0)
+            {
+                user.Delete("password");
+                deletedMockUsers.Push(user);
+            }
         }
         return deletedMockUsers;
     }

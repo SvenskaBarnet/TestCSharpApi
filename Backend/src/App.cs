@@ -1,5 +1,7 @@
 // Global settings
 
+using System.ComponentModel.DataAnnotations;
+
 Globals = Obj(new
 {
     debugOn = true,

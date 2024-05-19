@@ -20,8 +20,12 @@ public class UtilsTest() : IClassFixture<DatabaseFixture>
     public void TestRemoveMockUsers()
     {
         Arr usersInDb = SQLQuery("SELECT * FROM users");
-        Arr emailsInDb = usersInDb.Map(user => user.email);
-        Arr usersToBeRemoved = mockUsers.Filter(mockUser => emailsInDb.Contains(mockUser.email));
+
+        Arr mockUserEmails = Arr();
+        mockUsers.ForEach(user => mockUserEmails.Push(user.email));
+
+        Arr usersToBeRemoved = usersInDb.Filter(user => mockUserEmails.Contains(user.email));
+        usersToBeRemoved.ForEach(user => user.Delete("password"));
 
         var result = Utils.RemoveMockUsers();
 
