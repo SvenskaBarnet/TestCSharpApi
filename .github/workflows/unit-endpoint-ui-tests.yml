@@ -32,18 +32,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    # Install Cypress & save to cache
-    - name: Cache Cypress
-      id: cache-cypress
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/AppData/Local/Cypress
-          /ui-tests
-        key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
+    # Clean-Install Cypress 
     - name: Install Cypress
-      if: ${{ steps.cache-cypress.outputs.cache-hit != 'true'}}
       run: cd ui-tests && npm ci
 
     # Copy database from DbTemplate to Backend
