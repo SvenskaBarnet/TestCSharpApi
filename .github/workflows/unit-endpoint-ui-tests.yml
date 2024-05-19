@@ -39,6 +39,7 @@ jobs:
         node-version: '20.11.1'
         cache: 'npm'
         cache-dependency-path: ui-tests/package-lock.json
+    - run: cd ui-tests    
     - run: npm ci
     - run: npm test
 
