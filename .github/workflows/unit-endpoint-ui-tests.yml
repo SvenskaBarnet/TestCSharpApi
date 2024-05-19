@@ -33,14 +33,16 @@ jobs:
         dotnet-version: 8.0.x
 
     # Install Cypress
-    - name: Install Cypress 
+    - name: Install Cypress
       uses: actions/setup-node@v4
+      id: install-cypress
       with:
         node-version: '20.11.1'
         cache: 'npm'
         cache-dependency-path: ui-tests/package-lock.json
     - run: cd ui-tests && npm ci
-
+      if: steps.install-cypress.outputs.cache-hit != 'true'
+      
     # Copy database from DbTemplate to Backend
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
