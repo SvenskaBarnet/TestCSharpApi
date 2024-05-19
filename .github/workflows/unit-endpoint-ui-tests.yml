@@ -39,9 +39,8 @@ jobs:
         node-version: '20.11.1'
         cache: 'npm'
         cache-dependency-path: ui-tests/package-lock.json
-    - run: cd ui-tests    
-    - run: npm install
-    - run: npm test
+    - run: cd ui-tests && npm ci
+    - run: cd ui-tests && npm test
 
     # Copy database from DbTemplate to Backend
     - name: Copy database to project
