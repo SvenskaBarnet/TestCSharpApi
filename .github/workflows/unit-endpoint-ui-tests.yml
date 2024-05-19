@@ -32,7 +32,15 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    # Clean-Install Cypress 
+    # Install Cypress & save to cache
+    - name: Cache Cypress
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/AppData/Local/Cypress
+          /ui-tests
+        key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
     - name: Install Cypress
       run: cd ui-tests && npm ci
 
