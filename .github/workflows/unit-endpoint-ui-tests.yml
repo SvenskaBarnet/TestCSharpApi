@@ -1,4 +1,4 @@
-name: Unit and endpoint tests 
+name: Unit, endpoints and UI-testing 
 
 on:
   push:
@@ -32,6 +32,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
+    # Install Cypress
+    - name: Install Cypress
+      run: cd ui-tests && npm install
+
     # Copy database from DbTemplate to Backend
     - name: Copy database to project
       run: copy DbTemplate\\_db.sqlite3 Backend
@@ -48,3 +52,7 @@ jobs:
     # Run the endpoint tests
     - name: Run the endpoint tests
       run: cd endpoint-tests && npm test
+
+    # Run the UI tests
+    - name: Run the UI tests
+      run: cd ui-tests && npm run test-ui-cli
