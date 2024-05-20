@@ -39,6 +39,7 @@ jobs:
         path: |
           ~/AppData/Local/Cypress
           /ui-tests
+          /ui-tests/node_modules
         key: my-cache-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
     - name: Install Cypress
