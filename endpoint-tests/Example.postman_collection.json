@@ -34,7 +34,7 @@
 							"      \"lastName\": \"Doe\",",
 							"      \"role\": \"user\",",
 							"      \"password\": \"Password123!\"",
-							"    },",
+							"    }",
 							"  ],",
 							"  \"categories\": [",
 							"    {",
