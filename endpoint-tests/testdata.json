@@ -19,27 +19,6 @@
       "role": "user",
       "password": "Password123!"
     },
-    {
-      "email": "jane.smith@example.com",
-      "firstName": "Jane",
-      "lastName": "Smith",
-      "role": "user",
-      "password": "Smith!456"
-    },
-    {
-      "email": "mike.johnson@example.com",
-      "firstName": "Mike",
-      "lastName": "Johnson",
-      "role": "user",
-      "password": "Johnson!789"
-    },
-    {
-      "email": "sarah.brown@example.com",
-      "firstName": "Sarah",
-      "lastName": "Brown",
-      "role": "user",
-      "password": "Brown@123"
-    }
   ],
   "categories": [
     {
@@ -143,7 +122,7 @@
     {
       "comment": "These climbing shoes are fantastic for edging!",
       "productId": "La Sportiva Solution Climbing Shoes",
-      "userId": "sarah.brown@example.com",
+      "userId": "john.doe@example.com",
       "commentCreated": false
     },
     {
@@ -155,13 +134,13 @@
     {
       "comment": "Solid rope for both indoor and outdoor climbing.",
       "productId": "Black Diamond 9.9mm Climbing Rope",
-      "userId": "sarah.brown@example.com",
+      "userId": "john.doe@example.com",
       "commentCreated": false
     },
     {
       "comment": "Super cushy pad, great for long sessions.",
       "productId": "Organic Climbing Big Pad",
-      "userId": "jane.smith@example.com",
+      "userId": "thomas@nodehill.com",
       "commentCreated": false
     },
     {
@@ -173,7 +152,7 @@
     {
       "comment": "Perfect harness for beginners. Comfortable and easy to adjust.",
       "productId": "Black Diamond Momentum Climbing Harness",
-      "userId": "jane.smith@example.com",
+      "userId": "visit@visitor.com",
       "commentCreated": false
     },
     {
@@ -185,7 +164,7 @@
     {
       "comment": "Compact and lightweight. Ideal for short approaches.",
       "productId": "Metolius Session Crash Pad",
-      "userId": "mike.johnson@example.com",
+      "userId": "thomas@nodehill.com",
       "commentCreated": false
     },
     {
@@ -197,7 +176,7 @@
     {
       "comment": "Comfortable harness with good support. Great for long climbs.",
       "productId": "Petzl Sama Climbing Harness",
-      "userId": "mike.johnson@example.com",
+      "userId": "visit@visitor.com",
       "commentCreated": false
     },
     {
