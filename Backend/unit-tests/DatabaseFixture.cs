@@ -1,8 +1,8 @@
 namespace WebApp;
 
-public class DatabaseFixture: IDisposable
+public sealed class DatabaseFixture : IDisposable
 {
-    private string dbTemplatePath = FilePath("DbTemplate", "_db.sqlite3").Regplace(Regex.Escape("Backend\\"), "");
+    private readonly string dbTemplatePath = FilePath("DbTemplate", "_db.sqlite3").Regplace(Regex.Escape("Backend\\"), "");
     public DatabaseFixture()
     {
         File.Copy(dbTemplatePath, FilePath("_db.sqlite3"), true);
