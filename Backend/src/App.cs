@@ -14,4 +14,12 @@ Globals = Obj(new
     sessionLifeTimeHours = 2
 });
 
-Server.Start();
+try
+{
+ScriptRunner.Run();
+}
+catch(Exception ex)
+{
+    Console.WriteLine($"An error occured: {ex.Message}");
+}
+//Server.Start();
