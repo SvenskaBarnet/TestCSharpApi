@@ -1,6 +1,7 @@
 #!/bin/bash
 
 products="products.csv"
+parsedProducts="parsed-products.csv"
 newProducts=()
 allCategories=()
 if [ -e "$products" ]; then
@@ -38,10 +39,10 @@ if [ -e "$products" ]; then
         fi
     done < $products
 
-    printf "%s\n" "${newProducts[@]}" > "products.csv"
-    printf "%s\n" "${allCategories[@]}" >> "products.csv"
+    printf "%s\n" "${newProducts[@]}" > "parsed-products.csv"
+    printf "%s\n" "${allCategories[@]}" >> "parsed-products.csv"
     
-    input=$(tr -d '\r' < "$products" | \
+    input=$(tr -d '\r' < "$parsedProducts" | \
     sed 's/ *;/|/g' | \
     awk -F'|' \
     'BEGIN {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", "category", "product", "price", "description"}    
@@ -86,6 +87,28 @@ if [ -e "$products" ]; then
     }
 
     editFile
+
+    newProducts=()
+    allCategories=()
+    categoryEnum=("Bouldering" "Climbing Shoes" "Climbing Harnesses" "Climbing Ropes" "Climbing Clothes")
+
+    for (( i=0; i<${#categoryEnum[@]}; i++)); do
+        while IFS=";" read -r id name description price category; do 
+            cleanCategory=$(echo "$category" | tr -d '\r')
+            echo "i+1: $((i+1)),  categoryEnum: ${categoryEnum[$i]}, cleanCategory: $cleanCategory"
+            if ! (( $((i+1)) == "$cleanCategory" )); then
+                newProducts+=("$id;$name;$description;$price;${categoryEnum[$i]}")
+            fi
+        done < $products
+    done
+
+    printf "%s\n" "${newProducts[@]}" | sort -r -k1 > "parsed-products.csv"
+    
+    input=$(tr -d '\r' < "$parsedProducts" | \
+    sed 's/ *;/|/g' | \
+    awk -F'|' \
+    'BEGIN {printf "\t| %-20s| %-35s|\n", "category", "product"}    
+    {printf "\t| %-20s| %-35s|\n", $5, $2}' | sort -r -k1)
 
 else
     echo "File not found: $products"
