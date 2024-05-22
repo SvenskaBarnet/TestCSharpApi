@@ -41,8 +41,52 @@ if [ -e "$products" ]; then
     printf "%s\n" "${newProducts[@]}" > "products.csv"
     printf "%s\n" "${allCategories[@]}" >> "products.csv"
     
+    input=$(tr -d '\r' < "$products" | \
+    sed 's/ *;/|/g' | \
+    awk -F'|' \
+    'BEGIN {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", "category", "product", "price", "description"}    
+    {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", $5, $2, $4, $3}' | sort -r -k1)
 
-    tr -d '\r' < "$products" | sed 's/ *;/|/g' | awk -F'|' '{printf "|%-20s|%-35s|%-7s|%-85s|\n", $5, $2, $4, $3}'    
+    editFile() {
+        local filePath="correct-products.feature"
+        local firstMarker="Examples:"
+        local firstMarkerLine
+        local allEmptyLines
+        local secondMarkerLine
+        local textToInsert=$input
+        
+        firstMarkerLine=$(grep -n "$firstMarker" "$filePath" | cut -d: -f1 | head -n 1)
+        ((firstMarkerLine++))
+
+        allEmptyLines=$(grep -n -E '^\s*$' "$filePath" | cut -d: -f1)
+
+        while IFS= read -r line; do
+            if (( "$line" > "$firstMarkerLine" )); then
+                nextLine=$((firstMarkerLine + 1))
+                nextLineContent=$(sed -n "${nextLine}p" "$filePath")
+                    if ! [[ "$nextLineContent" ]]; then
+                        secondMarkerLine="$nextLine"
+                        break;
+                    else
+                        secondMarkerLine="$line"
+                        ((secondMarkerLine--))
+                        break;
+                    fi
+            fi
+        done <<< "$allEmptyLines"
+        
+        if ! (( secondMarkerLine - firstMarkerLine <= 1 )); then
+            sed -i "${firstMarkerLine},${secondMarkerLine}d" "$filePath"
+        fi
+
+        head -n $((firstMarkerLine - 1)) "$filePath" > temp_file && \
+        echo "$textToInsert" >> temp_file && \
+        tail -n +$firstMarkerLine correct-products.feature >> temp_file && \
+        mv temp_file correct-products.feature
+    }
+
+    editFile
+
 else
     echo "File not found: $products"
 fi
