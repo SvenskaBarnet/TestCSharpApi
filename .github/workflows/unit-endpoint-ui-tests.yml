@@ -2,9 +2,9 @@ name: Unit, endpoints and UI-testing
 
 on:
   push:
-    branches: [ "ui-test-script" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "ui-test-script" ]
+    branches: [ "dev" ]
 
 jobs:
 
