@@ -1,7 +1,5 @@
 // Global settings
 
-using System.ComponentModel.DataAnnotations;
-
 Globals = Obj(new
 {
     debugOn = true,
@@ -14,12 +12,4 @@ Globals = Obj(new
     sessionLifeTimeHours = 2
 });
 
-try
-{
-ScriptRunner.Run();
-}
-catch(Exception ex)
-{
-    Console.WriteLine($"An error occured: {ex.Message}");
-}
 Server.Start();
