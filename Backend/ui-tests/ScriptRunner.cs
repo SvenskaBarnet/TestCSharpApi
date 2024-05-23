@@ -8,8 +8,8 @@ public static class ScriptRunner
     {
         Process process = new Process();
         process.StartInfo.WorkingDirectory = FilePath("..", "ui-tests");
-        process.StartInfo.FileName = "bash";
-        process.StartInfo.Arguments = "db-data-to-feature.sh";
+        process.StartInfo.FileName = "wsl";
+        process.StartInfo.Arguments = "-e ./db-data-to-feature.sh";
         process.StartInfo.RedirectStandardOutput = true;
         process.StartInfo.RedirectStandardError = true;
         process.StartInfo.UseShellExecute = false;

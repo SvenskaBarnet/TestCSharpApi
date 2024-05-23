@@ -48,7 +48,6 @@ Feature: As user I want to be able to see the correct products listed when I hav
 	| Alla                | Beginner Climb Shoes               | 600    | Comfortable and supportive shoes for beginners                                       |
 	| Alla                | AllRounder Shoes                   | 1000   | Versatile shoes suitable for all types of climbing                                   |
 
-
   Scenario Outline: Check that the category <category> does not shows the product <product>.
     Given that I am on the product page
     When I choose the category "<category>"
