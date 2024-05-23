@@ -1,70 +1,66 @@
 #!/bin/bash
 
-products="products.csv"
-parsedProducts="parsed-products.csv"
-newProducts=()
-allCategories=()
-if [ -e "$products" ]; then
-
-    while IFS=";" read -r id name description price category; do 
-    
-    cleanCategory=$(echo "$category" | tr -d '\r')
-    
-        if [[ "$cleanCategory" == "1" || "$cleanCategory" == "Bouldering" ]]
-        then
-            newProducts+=("$id;$name;$description;$price;Bouldering")
-        elif [[ "$cleanCategory" == "2"  || "$cleanCategory" == "Climbing Shoes" ]]
-        then
-            newProducts+=("$id;$name;$description;$price;Climbing Shoes")
-        elif [[ "$cleanCategory" == "3"  || "$cleanCategory" == "Climbing Harnesses" ]]
-        then
-            newProducts+=("$id;$name;$description;$price;Climbing Harnesses")
-        elif [[ "$cleanCategory" == "4"  || "$cleanCategory" == "Climbing Ropes" ]]
-        then
-            newProducts+=("$id;$name;$description;$price;Climbing Ropes")
-        elif [[ "$cleanCategory" == "5"  || "$cleanCategory" == "Climbing Clothes" ]]
-        then
-            newProducts+=("$id;$name;$description;$price;Climbing Clothes")
-        elif [[ "$cleanCategory" == "Alla" ]]
-        then
+for (( i=0; i<2; i++ )); do
+    products="products.csv"
+    parsedProducts="parsed-products.csv"
+    scenario=$i
+    newProducts=()
+    allCategories=()
+    if [ -e "$products" ]; then
+        while IFS=";" read -r id name description price category; do 
+            cleanCategory=$(echo "$category" | tr -d '\r')
             allCategories+=("$id;$name;$description;$price;Alla")
-        else
-            echo "$cleanCategory"
-            echo "nope"
-        fi
 
-        if [[ "$cleanCategory" == "1" || "$cleanCategory" == "2" || "$cleanCategory" == "3" || "$cleanCategory" == "4" || "$cleanCategory" == "5" ]]
-        then
-            allCategories+=("$id;$name;$description;$price;Alla")
-        fi
-    done < $products
+            if [[ "$cleanCategory" == "1" ]]; then
+                newProducts+=("$id;$name;$description;$price;Bouldering")
 
-    printf "%s\n" "${newProducts[@]}" > "parsed-products.csv"
-    printf "%s\n" "${allCategories[@]}" >> "parsed-products.csv"
+            elif [[ "$cleanCategory" == "2"  ]]; then
+                newProducts+=("$id;$name;$description;$price;Climbing Shoes")
+
+            elif [[ "$cleanCategory" == "3"  ]]; then
+                newProducts+=("$id;$name;$description;$price;Climbing Harnesses")
+
+            elif [[ "$cleanCategory" == "4"  ]]; then
+                newProducts+=("$id;$name;$description;$price;Climbing Ropes")
+
+            elif [[ "$cleanCategory" == "5"  ]]; then
+                newProducts+=("$id;$name;$description;$price;Climbing Clothes")
+            fi
+        done < $products
+
+        printf "%s\n" "${newProducts[@]}" > "parsed-products.csv"
+        printf "%s\n" "${allCategories[@]}" >> "parsed-products.csv"
     
-    input=$(tr -d '\r' < "$parsedProducts" | \
-    sed 's/ *;/|/g' | \
-    awk -F'|' \
-    'BEGIN {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", "category", "product", "price", "description"}    
-    {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", $5, $2, $4, $3}' | sort -r -k1)
+        input=$(tr -d '\r' < "$parsedProducts" | \
+        sed 's/ *;/|/g' | \
+        awk -F'|' \
+        'BEGIN {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", "category", "product", "price", "description"}    
+        {printf "\t| %-20s| %-35s| %-7s| %-85s|\n", $5, $2, $4, $3}' | sort -r -k1)
 
-    editFile() {
-        local filePath="correct-products.feature"
-        local firstMarker="Examples:"
-        local firstMarkerLine
-        local allEmptyLines
-        local secondMarkerLine
-        local textToInsert=$input
+        editFile() {
+            local scenario=$1
+            local filePath="specs/correct-products.feature"
+            local firstMarker="Examples:"
+            local firstMarkerLine
+            local allEmptyLines
+            local secondMarkerLine
+            local textToInsert=$input
         
-        firstMarkerLine=$(grep -n "$firstMarker" "$filePath" | cut -d: -f1 | head -n 1)
-        ((firstMarkerLine++))
+            if (( scenario == 0 )); then
+                firstMarkerLine=$(grep -n "$firstMarker" "$filePath" | cut -d: -f1 | head -n 1)
+                ((firstMarkerLine++))
+            else    
+                firstMarkerLine=$(grep -n "$firstMarker" "$filePath" | cut -d: -f1 | tail -n 1)
+                ((firstMarkerLine++))
+            fi
 
-        allEmptyLines=$(grep -n -E '^\s*$' "$filePath" | cut -d: -f1)
+            allEmptyLines=$(grep -n -E '^\s*$' "$filePath" | cut -d: -f1)
 
-        while IFS= read -r line; do
-            if (( "$line" > "$firstMarkerLine" )); then
-                nextLine=$((firstMarkerLine + 1))
-                nextLineContent=$(sed -n "${nextLine}p" "$filePath")
+            while IFS= read -r line; do
+                if (( "$line" > "$firstMarkerLine" )); then
+                    nextLine=$((firstMarkerLine + 1))
+                    nextLineContent=$(sed -n "${nextLine}p" "$filePath")
+
                     if ! [[ "$nextLineContent" ]]; then
                         secondMarkerLine="$nextLine"
                         break;
@@ -73,42 +69,46 @@ if [ -e "$products" ]; then
                         ((secondMarkerLine--))
                         break;
                     fi
-            fi
-        done <<< "$allEmptyLines"
+                fi
+            done <<< "$allEmptyLines"
         
-        if ! (( secondMarkerLine - firstMarkerLine <= 1 )); then
-            sed -i "${firstMarkerLine},${secondMarkerLine}d" "$filePath"
-        fi
-        echo "first MarkerLine $firstMarkerLine"
-        head -n $((firstMarkerLine - 1)) "$filePath" > temp_file && \
-        echo "$textToInsert" >> temp_file && \
-        tail -n +$firstMarkerLine correct-products.feature >> temp_file && \
-        mv temp_file correct-products.feature
-    }
-
-    editFile
-
-    newProducts=()
-    allCategories=()
-    categoryEnum=("Bouldering" "Climbing Shoes" "Climbing Harnesses" "Climbing Ropes" "Climbing Clothes")
-
-    for (( i=0; i<${#categoryEnum[@]}; i++)); do
-        while IFS=";" read -r id name description price category; do 
-            cleanCategory=$(echo "$category" | tr -d '\r')
-            if ! (( $((i+1)) == "$cleanCategory" )); then
-                newProducts+=("$id;$name;$description;$price;${categoryEnum[$i]}")
+            if ! (( secondMarkerLine - firstMarkerLine <= 1 )); then
+                sed -i "${firstMarkerLine},${secondMarkerLine}d" "$filePath"
             fi
-        done < $products
-    done
+            head -n $((firstMarkerLine - 1)) "$filePath" > temp_file && \
+            echo "$textToInsert" >> temp_file && \
+            tail -n +$firstMarkerLine specs/correct-products.feature >> temp_file && \
+            mv temp_file specs/correct-products.feature
+        }
+        if (( scenario == 0 )); then
+            editFile 0
+        fi
 
-    printf "%s\n" "${newProducts[@]}" | sort -r -k1 > "parsed-products.csv"
+        newProducts=()
+        allCategories=()
+        categoryEnum=("Bouldering" "Climbing Shoes" "Climbing Harnesses" "Climbing Ropes" "Climbing Clothes")
+
+        for (( j=0; j<${#categoryEnum[@]}; j++)); do
+            while IFS=";" read -r id name description price category; do 
+                cleanCategory=$(echo "$category" | tr -d '\r')
+                if ! (( $((j+1)) == "$cleanCategory" )); then
+                    newProducts+=("$id;$name;$description;$price;${categoryEnum[$j]}")
+                fi
+            done < $products
+        done
+
+        printf "%s\n" "${newProducts[@]}" | sort -r -k1 > "parsed-products.csv"
     
-    input=$(tr -d '\r' < "$parsedProducts" | \
-    sed 's/ *;/|/g' | \
-    awk -F'|' \
-    'BEGIN {printf "\t| %-20s| %-35s|\n", "category", "product"}    
-    {printf "\t| %-20s| %-35s|\n", $5, $2}' | sort -r -k1)
-    echo "$input"
-else
-    echo "File not found: $products"
-fi
+        input=$(tr -d '\r' < "$parsedProducts" | \
+        sed 's/ *;/|/g' | \
+        awk -F'|' \
+        'BEGIN {printf "\t| %-20s| %-35s|\n", "category", "product"}    
+        {printf "\t| %-20s| %-35s|\n", $5, $2}' | sort -r -k1)
+    
+        if (( scenario == 1 )); then
+            editFile 1
+        fi
+    else
+        echo "File not found: $products"
+    fi
+done

@@ -2,7 +2,7 @@ namespace WebApp;
 using System;
 using System.Diagnostics;
 
-public class ScriptRunner
+public static class ScriptRunner
 {
     public static void Run()
     {
