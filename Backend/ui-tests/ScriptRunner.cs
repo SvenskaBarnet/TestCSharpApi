@@ -7,7 +7,7 @@ public class ScriptRunner
     public static void Run()
     {
         Process process = new Process();
-        process.StartInfo.WorkingDirectory = FilePath("ui-tests").Regplace(Regex.Escape("Backend\\"), "");
+        process.StartInfo.WorkingDirectory = FilePath("..", "ui-tests");
         process.StartInfo.FileName = "bash";
         process.StartInfo.Arguments = "db-data-to-feature.sh";
         process.StartInfo.RedirectStandardOutput = true;

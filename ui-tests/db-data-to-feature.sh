@@ -79,7 +79,7 @@ if [ -e "$products" ]; then
         if ! (( secondMarkerLine - firstMarkerLine <= 1 )); then
             sed -i "${firstMarkerLine},${secondMarkerLine}d" "$filePath"
         fi
-
+        echo "first MarkerLine $firstMarkerLine"
         head -n $((firstMarkerLine - 1)) "$filePath" > temp_file && \
         echo "$textToInsert" >> temp_file && \
         tail -n +$firstMarkerLine correct-products.feature >> temp_file && \
@@ -95,7 +95,6 @@ if [ -e "$products" ]; then
     for (( i=0; i<${#categoryEnum[@]}; i++)); do
         while IFS=";" read -r id name description price category; do 
             cleanCategory=$(echo "$category" | tr -d '\r')
-            echo "i+1: $((i+1)),  categoryEnum: ${categoryEnum[$i]}, cleanCategory: $cleanCategory"
             if ! (( $((i+1)) == "$cleanCategory" )); then
                 newProducts+=("$id;$name;$description;$price;${categoryEnum[$i]}")
             fi
@@ -109,7 +108,7 @@ if [ -e "$products" ]; then
     awk -F'|' \
     'BEGIN {printf "\t| %-20s| %-35s|\n", "category", "product"}    
     {printf "\t| %-20s| %-35s|\n", $5, $2}' | sort -r -k1)
-
+    echo "$input"
 else
     echo "File not found: $products"
 fi
